@@ -1,0 +1,20 @@
+# Gradle temporary files and output
+.gradle/
+.vscode/
+build/
+
+# Kotlin management files
+.kotlin/
+
+# IDEA specific files
+.idea/
+*.iml
+*.iws
+
+# Eclipse specific files
+.settings/
+.classpath
+.project
+
+# Log files
+*.log
