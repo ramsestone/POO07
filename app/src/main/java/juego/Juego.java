@@ -1,6 +1,7 @@
 package juego;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
@@ -45,7 +46,9 @@ public class Juego {
             mainLienzo.limpia();
             mainLienzo.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, FONDO);
 
+            //=======================================================================================
             // Procesar Inputs
+            //=======================================================================================
             if (gameInput.disparoPres()) {
                 Proyectil nuevaBala = jugador.dispara();
                 if (nuevaBala != null) {
@@ -53,18 +56,30 @@ public class Juego {
                     balasActivas.add(nuevaBala);
                 }
             }
+            
+            //=======================================================================================
+            // Actualizacion de los proyectiles
+            //=======================================================================================
+            // Usamos un iterador para remover las balas que impactan o salen de la pantalla limpiamente
+            Iterator<Proyectil> iterador = this.balasActivas.iterator();
+            while (iterador.hasNext()) {
+                Proyectil currentBala = iterador.next();
+                currentBala.actualizarMovimiento(deltaTime);
+                currentBala.renderizar(mainLienzo);
 
-            for (Proyectil bala : balasActivas) {
-                bala.actualizarMovimiento(deltaTime);
+                int Y_OFFSET = 50;
+                boolean isDestruida = !currentBala.isVisible();
+                boolean isFueraDePantalla = currentBala.getY() > ALTO_PANTALLA + Y_OFFSET;
+
+                if (isDestruida || isFueraDePantalla) {
+                    iterador.remove();
+                }
             }
-            for (Proyectil bala : balasActivas) {
-                bala.renderizar(mainLienzo);
-            }
+
+            //=======================================================================================
+            // Actualizacion del jugador
+            //=======================================================================================
             jugador.actualziarMovimiento(gameInput, deltaTime);
-
-
-            // Actualizar logica de juego
-            // Renderizar Gráficos
             jugador.renderizar(mainLienzo);
 
             mainLienzo.mostrar(16);
