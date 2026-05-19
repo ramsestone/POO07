@@ -1,5 +1,7 @@
 package juego;
 
+import java.util.ArrayList;
+
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
@@ -9,34 +11,30 @@ public class Juego {
     private static final Imagen FONDO = new Imagen("app/src/main/resources/background_blue.png");
     private static final int ANCHO_PANTALLA = 800;
     private static final int ALTO_PANTALLA = 600;
-    private static final Lienzo lienzo = new Lienzo();
+    private Lienzo mainLienzo;
+    private ArrayList<Proyectil> balasActivas;
 
-    public static void main(String[] args) {
-        initJuego();
-        startGameLoop();
-    }
+    public Juego() {
+        this.mainLienzo = new Lienzo();
+        this.mainLienzo.ponTamanioLienzo(ANCHO_PANTALLA, ALTO_PANTALLA);
+        this.mainLienzo.ponEscalaX(0, ANCHO_PANTALLA);
+        this.mainLienzo.ponEscalaY(0, ALTO_PANTALLA);
+        this.balasActivas = new ArrayList<>();
 
-    private static void renderizarFrame() {
-        // El fondo se tiene que renderizar de esta forma puesto que se usó una escala
-        // para el lienzo
-        lienzo.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, FONDO);
-        jugador.renderizar();
-    }
-
-    private static void initJuego() {
-        lienzo.ponTamanioLienzo(ANCHO_PANTALLA, ALTO_PANTALLA);
-        lienzo.ponEscalaX(0, ANCHO_PANTALLA);
-        lienzo.ponEscalaY(0, ALTO_PANTALLA);
-
-        jugador = new Jugador(lienzo);
+        jugador = new Jugador(ANCHO_PANTALLA);
         jugador.aparecer();
     }
 
-    private static void startGameLoop() {
+    public static void main(String[] args) {
+        Juego juego = new Juego();
+        juego.startGameLoop();
+    }
+
+    private void startGameLoop() {
         boolean isRunning = true;
         // Implementación de deltatime para manejo correcto de frames
         long lastTime = System.currentTimeMillis();
-        Entrada gameInput = new Entrada(lienzo);
+        Entrada gameInput = new Entrada(mainLienzo);
 
         while (isRunning) {
             long currentTime = System.currentTimeMillis();
@@ -44,16 +42,32 @@ public class Juego {
             lastTime = currentTime;
 
             // Prepara pantalla para siguiente frame
-            lienzo.limpia();
+            mainLienzo.limpia();
+            mainLienzo.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, FONDO);
 
             // Procesar Inputs
-            jugador.actualizarMovimiento(gameInput, deltaTime);
+            if (gameInput.disparoPres()) {
+                Proyectil nuevaBala = jugador.dispara();
+                if (nuevaBala != null) {
+                    nuevaBala.aparecer();                    
+                    balasActivas.add(nuevaBala);
+                }
+            }
+
+            for (Proyectil bala : balasActivas) {
+                bala.actualizarMovimiento(deltaTime);
+            }
+            for (Proyectil bala : balasActivas) {
+                bala.renderizar(mainLienzo);
+            }
+            jugador.actualziarMovimiento(gameInput, deltaTime);
+
 
             // Actualizar logica de juego
             // Renderizar Gráficos
-            renderizarFrame();
+            jugador.renderizar(mainLienzo);
 
-            lienzo.mostrar(16);
+            mainLienzo.mostrar(16);
         }
     }
 

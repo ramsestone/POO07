@@ -6,37 +6,63 @@ import edu.epromero.util.Lienzo;
 public class Jugador extends ElementoGrafico {
     private Imagen sprite;
     // Offset del sprite para delimitar sus bordes. El sprite debe ser de 72 x 72
+    // Offset del sprite para delimitar sus bordes. El sprite debe ser de 72 x 72
     private final double X_OFFSET = 36;
+    private final double Y_OFFSET = 72;
 
     // Offset para que el sprite concuerde visualmente con la parte inferior de la
-    // pantalla
-    private final double POS_INICIAL_Y = 12;
+    // pantalla. Se usa una constante porque el jugador nunca sube ni baja
+    private final double POS_Y = 12;
     private double anchoPantalla;
-    private Lienzo lienzo;
     private double velocidadJugador;
 
-    public Jugador(Lienzo lienzo) {
+    // Atributos de control
+    private double tiempoEntreDisparos;
+    private double temporizadorDisparo;
+
+    public Jugador(double anchoPantalla) {
         super();
-        this.lienzo = lienzo;
         final String SPRITE_PATH = "app/src/main/resources/jugador_00.png";
         this.sprite = new Imagen(SPRITE_PATH);
-        this.anchoPantalla = this.lienzo.pideLimiteXMax();
+        this.anchoPantalla = anchoPantalla;
         this.velocidadJugador = anchoPantalla / 5;
+
+        this.tiempoEntreDisparos = 0.5;
+        // Lo iniciamos igual al tiempo límite para que pueda disparar inmediatamente al iniciar el juego
+        this.temporizadorDisparo = this.tiempoEntreDisparos;
     }
 
+    @Override
     public void aparecer() {
         this.esVisible = true;
         this.posX = anchoPantalla / 2;
-        this.posY = POS_INICIAL_Y;
+        this.posY = POS_Y;
     }
 
-    public void actualizarMovimiento(Entrada gameInput, double deltatime) {
+    /**
+     * Genera una nueva bala con posicion relativa a la de la nave rebelde
+     * 
+     * @return Un nuevo objeto instanciado de Proyectil.
+     */
+    public Proyectil dispara() {
+        if (this.temporizadorDisparo >= this.tiempoEntreDisparos) {
+            // Reiniciamos el reloj a cero
+            this.temporizadorDisparo = 0.0;
+            Proyectil bala = new Proyectil(this.posX, this.posY + Y_OFFSET);
+            return bala;         
+        }
+        return null;
+    }
+
+    public void actualziarMovimiento(Entrada gameInput, double deltaTime) {
         if (!esVisible) {
             return;
         }
 
+        this.temporizadorDisparo += deltaTime;
+
         // Calcular la distancia para el frame actual
-        double distanciaFrame = this.velocidadJugador * deltatime;
+        double distanciaFrame = this.velocidadJugador * deltaTime;
 
         // Gestionar movimiento
         if (gameInput.izquierdaPres()) {
@@ -45,10 +71,6 @@ public class Jugador extends ElementoGrafico {
 
         if (gameInput.derechaPres()) {
             this.posX += distanciaFrame;
-        }
-
-        if (gameInput.disparoPres()) {
-            // disparar();
         }
 
         // Gestionar limites de la pantalla
@@ -60,9 +82,9 @@ public class Jugador extends ElementoGrafico {
         }
     }
 
-    public void renderizar() {
+    public void renderizar(Lienzo lienzo) {
         if (esVisible) {
-            this.lienzo.dibujo(posX, posY, sprite);
+            lienzo.dibujo(posX, posY, sprite);
         }
     }
 }

@@ -23,6 +23,6 @@ public class Entrada {
     }
 
     public boolean disparoPres() {
-        return lienzo.fuePulsadaTecla(KeyEvent.VK_SPACE) || lienzo.esRatonPresionado();
+        return lienzo.fuePulsadaTecla(KeyEvent.VK_SPACE);
     }
 }
