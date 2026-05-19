@@ -1,21 +1,26 @@
 package juego;
 
 import edu.epromero.util.Imagen;
-import edu.epromero.util.LienzoStd;
+import edu.epromero.util.Lienzo;
 
 public class Jugador extends ElementoGrafico {
     private Imagen sprite;
+    // Offset del sprite para delimitar sus bordes. El sprite debe ser de 72 x 72
+    private final double X_OFFSET = 36;
 
-    // Offset para que el sprite concuerde visualmente con la parte inferior de la pantalla
+    // Offset para que el sprite concuerde visualmente con la parte inferior de la
+    // pantalla
     private final double POS_INICIAL_Y = 12;
     private double anchoPantalla;
+    private Lienzo lienzo;
     private double velocidadJugador;
 
-    public Jugador(double anchoPantalla) {
+    public Jugador(Lienzo lienzo) {
         super();
+        this.lienzo = lienzo;
         final String SPRITE_PATH = "app/src/main/resources/jugador_00.png";
         this.sprite = new Imagen(SPRITE_PATH);
-        this.anchoPantalla = anchoPantalla;
+        this.anchoPantalla = this.lienzo.pideLimiteXMax();
         this.velocidadJugador = anchoPantalla / 5;
     }
 
@@ -42,18 +47,22 @@ public class Jugador extends ElementoGrafico {
             this.posX += distanciaFrame;
         }
 
+        if (gameInput.disparoPres()) {
+            // disparar();
+        }
+
         // Gestionar limites de la pantalla
         if (this.posX <= 0) {
             this.posX = 0;
         }
-        if (this.posX >= anchoPantalla) {
-            this.posX = anchoPantalla;
+        if (this.posX >= anchoPantalla - X_OFFSET) {
+            this.posX = anchoPantalla - X_OFFSET;
         }
     }
 
     public void renderizar() {
         if (esVisible) {
-            LienzoStd.dibujo(posX, posY, sprite);
+            this.lienzo.dibujo(posX, posY, sprite);
         }
     }
 }

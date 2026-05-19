@@ -1,7 +1,7 @@
 package juego;
 
 import edu.epromero.util.Imagen;
-import edu.epromero.util.LienzoStd;
+import edu.epromero.util.Lienzo;
 
 public class Juego {
 
@@ -9,6 +9,7 @@ public class Juego {
     private static final Imagen FONDO = new Imagen("app/src/main/resources/background_blue.png");
     private static final int ANCHO_PANTALLA = 800;
     private static final int ALTO_PANTALLA = 600;
+    private static final Lienzo lienzo = new Lienzo();
 
     public static void main(String[] args) {
         initJuego();
@@ -16,26 +17,26 @@ public class Juego {
     }
 
     private static void renderizarFrame() {
-        // El fondo se tiene que renderizar de esta forma puesto que se usó una escala para el lienzo
-        LienzoStd.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, FONDO);
+        // El fondo se tiene que renderizar de esta forma puesto que se usó una escala
+        // para el lienzo
+        lienzo.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, FONDO);
         jugador.renderizar();
     }
-    
+
     private static void initJuego() {
-        
-        jugador = new Jugador(ANCHO_PANTALLA);
+        lienzo.ponTamanioLienzo(ANCHO_PANTALLA, ALTO_PANTALLA);
+        lienzo.ponEscalaX(0, ANCHO_PANTALLA);
+        lienzo.ponEscalaY(0, ALTO_PANTALLA);
+
+        jugador = new Jugador(lienzo);
         jugador.aparecer();
-        
-        LienzoStd.ponTamanioLienzo(ANCHO_PANTALLA, ALTO_PANTALLA);
-        LienzoStd.ponEscalaX(0, ANCHO_PANTALLA);
-        LienzoStd.ponEscalaY(0, ALTO_PANTALLA);
     }
 
     private static void startGameLoop() {
         boolean isRunning = true;
         // Implementación de deltatime para manejo correcto de frames
         long lastTime = System.currentTimeMillis();
-        Entrada gameInput = new Entrada();
+        Entrada gameInput = new Entrada(lienzo);
 
         while (isRunning) {
             long currentTime = System.currentTimeMillis();
@@ -43,7 +44,7 @@ public class Juego {
             lastTime = currentTime;
 
             // Prepara pantalla para siguiente frame
-            LienzoStd.limpia();
+            lienzo.limpia();
 
             // Procesar Inputs
             jugador.actualizarMovimiento(gameInput, deltaTime);
@@ -52,7 +53,7 @@ public class Juego {
             // Renderizar Gráficos
             renderizarFrame();
 
-            LienzoStd.mostrar(16);
+            lienzo.mostrar(16);
         }
     }
 

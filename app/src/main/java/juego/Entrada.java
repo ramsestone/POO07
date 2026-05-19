@@ -1,19 +1,28 @@
 package juego;
 
 import java.awt.event.KeyEvent;
-import edu.epromero.util.LienzoStd;
+import edu.epromero.util.Lienzo;
 
 public class Entrada {
-    
-    public boolean izquierdaPres () {
-        return LienzoStd.fuePulsadaTecla(KeyEvent.VK_A) || LienzoStd.fuePulsadaTecla(KeyEvent.VK_LEFT);
+    private Lienzo lienzo;
+
+    public Entrada(Lienzo lienzo) {
+        this.lienzo = lienzo;
     }
 
-    public boolean derechaPres () {
-        return LienzoStd.fuePulsadaTecla(KeyEvent.VK_D) || LienzoStd.fuePulsadaTecla(KeyEvent.VK_RIGHT);
+    public boolean izquierdaPres() {
+        return lienzo.fuePulsadaTecla(KeyEvent.VK_A) || lienzo.fuePulsadaTecla(KeyEvent.VK_LEFT);
     }
 
-    public boolean disparoPres () {
-        return LienzoStd.fuePulsadaTecla(KeyEvent.VK_SPACE) || LienzoStd.esRatonPresionado();
+    public boolean derechaPres() {
+        return lienzo.fuePulsadaTecla(KeyEvent.VK_D) || lienzo.fuePulsadaTecla(KeyEvent.VK_RIGHT);
+    }
+
+    public boolean arribaPres() {
+        return lienzo.fuePulsadaTecla(KeyEvent.VK_D) || lienzo.fuePulsadaTecla(KeyEvent.VK_RIGHT);
+    }
+
+    public boolean disparoPres() {
+        return lienzo.fuePulsadaTecla(KeyEvent.VK_SPACE) || lienzo.esRatonPresionado();
     }
 }
