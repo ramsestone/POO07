@@ -3,14 +3,11 @@ package juego;
 import edu.epromero.util.ComportamientoEnemigo;
 import edu.epromero.util.Imagen;
 
-@ComportamientoEnemigo
+@ComportamientoEnemigo(tipo = "AveDePresa", resistencia = 3, puntos = 10)
 public class AveDePresa extends NaveEnemiga {
 
-    public AveDePresa(Imagen sprite, String tipo, int resistencia, int puntos) {
-        super(sprite);
-        this.tipo = tipo;
-        this.resistencia = resistencia;
-        this.puntos = puntos;
+    public AveDePresa(Imagen sprite, double anchoPantalla, double altoPantalla) {
+        super(sprite, anchoPantalla, altoPantalla);
     }
 
     @Override

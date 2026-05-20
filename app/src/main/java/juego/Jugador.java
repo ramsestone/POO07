@@ -1,19 +1,12 @@
 package juego;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
 public class Jugador extends ElementoGrafico implements Dispara {
 
-    // Offset para que el sprite concuerde visualmente con la parte inferior de la
-    // pantalla. Se usa una constante porque el jugador nunca sube ni baja
-    private double anchoPantalla;
     // Segundos que se tarda en ir de extremo a extremo de la pantalla
     private final int SEGUNDOS_RECORRIDO = 5;
-    private static final Imagen PROYECTIL_SPRITE = new Imagen("app/src/main/resources/proyectil_azul.png");
 
     // Definimos offsets para delimitar los bordes del sprite
     private double X_OFFSET;
@@ -23,18 +16,15 @@ public class Jugador extends ElementoGrafico implements Dispara {
     private Entrada gameInput;
 
     private SistemaDeArmamento canionLaser;
-    private ArrayList<Proyectil> balasActivas;
 
     // BPS = Balas Por Segundo
     private final double BPS = 3;
 
-    public Jugador(Imagen sprite, Entrada gameInput, double anchoPantalla) {
-        super(sprite);
-        this.anchoPantalla = anchoPantalla;
-        this.balasActivas = new ArrayList<>();
-        this.velocidadJugador = anchoPantalla / SEGUNDOS_RECORRIDO;
-        this.X_OFFSET = this.getAncho() / 2;
-        this.Y_OFFSET = this.getAlto() / 2;
+    public Jugador(Imagen sprite, double anchoPantalla, double altoPantalla, Entrada gameInput) {
+        super(sprite, anchoPantalla, altoPantalla);
+        this.velocidadJugador = (anchoPantalla / this.SEGUNDOS_RECORRIDO);
+        this.X_OFFSET = this.getAnchoSprite() / 2;
+        this.Y_OFFSET = this.getAltoSprite() / 2;
         this.gameInput = gameInput;
         this.canionLaser = new SistemaDeArmamento(BPS);
     }
@@ -48,9 +38,8 @@ public class Jugador extends ElementoGrafico implements Dispara {
     public ProyectilAzul disparar() {
         if (canionLaser.puedeDisparar()) {
             canionLaser.reiniciarEnfriamiento();
-            ProyectilAzul laser = new ProyectilAzul();
+            ProyectilAzul laser = new ProyectilAzul(anchoPantalla, altoPantalla);
             laser.aparecer(posX, posY + Y_OFFSET);
-            balasActivas.add(laser);
             return laser;
         }
         return null;
@@ -60,8 +49,12 @@ public class Jugador extends ElementoGrafico implements Dispara {
         if (!esVisible)
             return;
 
+        //DEBUG
+        // System.out.println(posX);
+
         // Calcular la distancia para el frame actual
         double distanciaFrame = this.velocidadJugador * deltaTime;
+        canionLaser.actualizar(deltaTime);
 
         // Gestionar movimiento
         if (gameInput.izquierdaPres()) {
@@ -104,9 +97,5 @@ public class Jugador extends ElementoGrafico implements Dispara {
 
     public void setVelocidadJugador(double velocidadJugador) {
         this.velocidadJugador = velocidadJugador;
-    }
-
-    public ArrayList<Proyectil> getBalasActivas() {
-        return balasActivas;
     }
 }

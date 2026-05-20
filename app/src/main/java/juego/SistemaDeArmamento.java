@@ -15,12 +15,15 @@ public class SistemaDeArmamento {
         this.temporizador = this.tiempoEntreDisparos;
     }
 
+    public void actualizar(double deltaTime) {
+        this.temporizador += deltaTime;
+    }
+
     /**
      * @return true si el arma ya se enfrió y está lista para volver a disparar.
      */
     public boolean puedeDisparar() {
         return this.temporizador >= this.tiempoEntreDisparos;
-        // TODO: Arreglar tiempo entre disparos. this.temporizador nunca se actualiza
     }
 
     /**

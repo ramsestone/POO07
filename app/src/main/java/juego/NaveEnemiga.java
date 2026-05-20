@@ -8,8 +8,8 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible,
     public int resistencia;
     public int puntos;
 
-    public NaveEnemiga(Imagen sprite) {
-        super(sprite);
+    public NaveEnemiga(Imagen sprite, double anchoPantalla, double altoPantalla) {
+        super(sprite, anchoPantalla, altoPantalla);
     }
 
     @Override
