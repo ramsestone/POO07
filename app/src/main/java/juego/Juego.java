@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,21 +10,32 @@ import edu.epromero.util.Lienzo;
 public class Juego {
 
     private static Jugador jugador;
+    AveDePresa enemigo;
+
+    // Definimos los sprites que vamos a usar
     private static final Imagen FONDO = new Imagen("app/src/main/resources/background_blue.png");
-    private static final int ANCHO_PANTALLA = 800;
+    private static final Imagen NAVE_REBELDE_SPRITE = new Imagen("app/src/main/resources/nave_rebelde.png");
+    private static final Imagen AVE_DE_PRESA_SPRITE = new Imagen("app/src/main/resources/ave_de_presa.png");
+
+    private static final int ANCHO_PANTALLA = 1000;
     private static final int ALTO_PANTALLA = 600;
     private Lienzo mainLienzo;
-    private ArrayList<Proyectil> balasActivas;
+    // private ArrayList<NaveEnemiga> enemigos;
+    private Entrada gameInput;
 
     public Juego() {
         this.mainLienzo = new Lienzo();
+        this.gameInput = new Entrada(mainLienzo);
         this.mainLienzo.ponTamanioLienzo(ANCHO_PANTALLA, ALTO_PANTALLA);
         this.mainLienzo.ponEscalaX(0, ANCHO_PANTALLA);
         this.mainLienzo.ponEscalaY(0, ALTO_PANTALLA);
-        this.balasActivas = new ArrayList<>();
 
-        jugador = new Jugador(ANCHO_PANTALLA);
-        jugador.aparecer();
+        jugador = new Jugador(NAVE_REBELDE_SPRITE, gameInput, ANCHO_PANTALLA);
+        enemigo = new AveDePresa(AVE_DE_PRESA_SPRITE, "Ave De Presa", 3, 10);
+        jugador.setVelocidadJugador(ANCHO_PANTALLA / 5);
+        jugador.aparecer(ANCHO_PANTALLA / 2, 12);
+
+        enemigo.aparecer(ANCHO_PANTALLA / 2, ALTO_PANTALLA - 72);
     }
 
     public static void main(String[] args) {
@@ -46,25 +58,22 @@ public class Juego {
             mainLienzo.limpia();
             mainLienzo.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, FONDO);
 
-            //=======================================================================================
+            // =======================================================================================
             // Procesar Inputs
-            //=======================================================================================
+            // =======================================================================================
             if (gameInput.disparoPres()) {
-                Proyectil nuevaBala = jugador.dispara();
-                if (nuevaBala != null) {
-                    nuevaBala.aparecer();                    
-                    balasActivas.add(nuevaBala);
-                }
+                jugador.disparar();
             }
-            
-            //=======================================================================================
+
+            // =======================================================================================
             // Actualizacion de los proyectiles
-            //=======================================================================================
-            // Usamos un iterador para remover las balas que impactan o salen de la pantalla limpiamente
-            Iterator<Proyectil> iterador = this.balasActivas.iterator();
+            // =======================================================================================
+            // Usamos un iterador para remover las balas que impactan o salen de la pantalla
+            // limpiamente
+            Iterator<Proyectil> iterador = jugador.getBalasActivas().iterator();
             while (iterador.hasNext()) {
                 Proyectil currentBala = iterador.next();
-                currentBala.actualizarMovimiento(deltaTime);
+                currentBala.actualizar(deltaTime);
                 currentBala.renderizar(mainLienzo);
 
                 int Y_OFFSET = 50;
@@ -76,11 +85,12 @@ public class Juego {
                 }
             }
 
-            //=======================================================================================
+            // =======================================================================================
             // Actualizacion del jugador
-            //=======================================================================================
-            jugador.actualziarMovimiento(gameInput, deltaTime);
+            // =======================================================================================
+            jugador.actualizar(deltaTime);
             jugador.renderizar(mainLienzo);
+            enemigo.renderizar(mainLienzo);
 
             mainLienzo.mostrar(16);
         }

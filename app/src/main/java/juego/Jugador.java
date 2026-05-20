@@ -1,65 +1,64 @@
 package juego;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
-public class Jugador extends ElementoGrafico {
-    private Imagen sprite;
-    // Offset del sprite para delimitar sus bordes. El sprite debe ser de 72 x 72
-    // Offset del sprite para delimitar sus bordes. El sprite debe ser de 72 x 72
-    private final double X_OFFSET = 36;
-    private final double Y_OFFSET = 72;
+public class Jugador extends ElementoGrafico implements Dispara {
 
     // Offset para que el sprite concuerde visualmente con la parte inferior de la
     // pantalla. Se usa una constante porque el jugador nunca sube ni baja
-    private final double POS_Y = 12;
     private double anchoPantalla;
+    // Segundos que se tarda en ir de extremo a extremo de la pantalla
+    private final int SEGUNDOS_RECORRIDO = 5;
+    private static final Imagen PROYECTIL_SPRITE = new Imagen("app/src/main/resources/proyectil_azul.png");
+
+    // Definimos offsets para delimitar los bordes del sprite
+    private double X_OFFSET;
+    private double Y_OFFSET;
     private double velocidadJugador;
 
-    // Atributos de control
-    private double tiempoEntreDisparos;
-    private double temporizadorDisparo;
+    private Entrada gameInput;
 
-    public Jugador(double anchoPantalla) {
-        super();
-        final String SPRITE_PATH = "app/src/main/resources/jugador_00.png";
-        this.sprite = new Imagen(SPRITE_PATH);
+    private SistemaDeArmamento canionLaser;
+    private ArrayList<Proyectil> balasActivas;
+
+    // BPS = Balas Por Segundo
+    private final double BPS = 3;
+
+    public Jugador(Imagen sprite, Entrada gameInput, double anchoPantalla) {
+        super(sprite);
         this.anchoPantalla = anchoPantalla;
-        this.velocidadJugador = anchoPantalla / 5;
-
-        this.tiempoEntreDisparos = 0.5;
-        // Lo iniciamos igual al tiempo límite para que pueda disparar inmediatamente al iniciar el juego
-        this.temporizadorDisparo = this.tiempoEntreDisparos;
+        this.balasActivas = new ArrayList<>();
+        this.velocidadJugador = anchoPantalla / SEGUNDOS_RECORRIDO;
+        this.X_OFFSET = this.getAncho() / 2;
+        this.Y_OFFSET = this.getAlto() / 2;
+        this.gameInput = gameInput;
+        this.canionLaser = new SistemaDeArmamento(BPS);
     }
 
     @Override
-    public void aparecer() {
-        this.esVisible = true;
-        this.posX = anchoPantalla / 2;
-        this.posY = POS_Y;
+    public void aparecer(double posInicialX, double posInicialY) {
+        super.aparecer(posInicialX, posInicialY);
     }
 
-    /**
-     * Genera una nueva bala con posicion relativa a la de la nave rebelde
-     * 
-     * @return Un nuevo objeto instanciado de Proyectil.
-     */
-    public Proyectil dispara() {
-        if (this.temporizadorDisparo >= this.tiempoEntreDisparos) {
-            // Reiniciamos el reloj a cero
-            this.temporizadorDisparo = 0.0;
-            Proyectil bala = new Proyectil(this.posX, this.posY + Y_OFFSET);
-            return bala;         
+    @Override
+    public ProyectilAzul disparar() {
+        if (canionLaser.puedeDisparar()) {
+            canionLaser.reiniciarEnfriamiento();
+            ProyectilAzul laser = new ProyectilAzul();
+            laser.aparecer(posX, posY + Y_OFFSET);
+            balasActivas.add(laser);
+            return laser;
         }
         return null;
     }
 
-    public void actualziarMovimiento(Entrada gameInput, double deltaTime) {
-        if (!esVisible) {
+    public void actualizar(double deltaTime) {
+        if (!esVisible)
             return;
-        }
-
-        this.temporizadorDisparo += deltaTime;
 
         // Calcular la distancia para el frame actual
         double distanciaFrame = this.velocidadJugador * deltaTime;
@@ -73,18 +72,41 @@ public class Jugador extends ElementoGrafico {
             this.posX += distanciaFrame;
         }
 
+        if (gameInput.disparoPres()) {
+            disparar();
+        }
+
         // Gestionar limites de la pantalla
         if (this.posX <= 0) {
             this.posX = 0;
         }
-        if (this.posX >= anchoPantalla - X_OFFSET) {
-            this.posX = anchoPantalla - X_OFFSET;
+        if (this.posX >= anchoPantalla) {
+            this.posX = anchoPantalla;
         }
     }
 
+    @Override
     public void renderizar(Lienzo lienzo) {
-        if (esVisible) {
-            lienzo.dibujo(posX, posY, sprite);
-        }
+        super.renderizar(lienzo);
+    }
+
+    public double getX_OFFSET() {
+        return X_OFFSET;
+    }
+
+    public double getY_OFFSET() {
+        return Y_OFFSET;
+    }
+
+    public double getVelocidadJugador() {
+        return velocidadJugador;
+    }
+
+    public void setVelocidadJugador(double velocidadJugador) {
+        this.velocidadJugador = velocidadJugador;
+    }
+
+    public ArrayList<Proyectil> getBalasActivas() {
+        return balasActivas;
     }
 }
