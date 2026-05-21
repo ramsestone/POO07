@@ -16,6 +16,8 @@ public abstract class ElementoGrafico {
     // Dimensiones del sprite
     protected double anchoSprite;
     protected double altoSprite;
+    // Lienzo
+    protected Lienzo lienzo;
 
     public ElementoGrafico(Imagen sprite, double anchoPantalla, double altoPantalla) {
         this.esVisible = false;
@@ -24,10 +26,9 @@ public abstract class ElementoGrafico {
         this.altoPantalla = altoPantalla;
         this.anchoSprite = this.sprite.ancho();
         this.altoSprite = this.sprite.alto();
-
     }
 
-    public abstract void actualizar(double deltaTime);
+    public abstract void mover(double deltaTime);
 
     public double getX() {
         return this.posX;
@@ -48,12 +49,13 @@ public abstract class ElementoGrafico {
     }
 
     public void renderizar(Lienzo lienzo) {
-        if (esVisible) {
-            // DEBUG: Muestra los delimitadores de todos los elementos gráficos
-            lienzo.ponColorLapiz(Color.RED);
-            lienzo.cuadro(posX, posY, this.getAnchoSprite() / 2);
-            lienzo.dibujo(posX, posY, this.sprite);
+        if (!esVisible) {
+            return;
         }
+        lienzo.dibujo(this.posX, this.posY, this.sprite);
+        // DEBUG: Muestra los delimitadores de todos los elementos gráficos
+        lienzo.ponColorLapiz(Color.RED);
+        lienzo.rectangulo(posX, posY, anchoSprite / 2.0, altoSprite / 2.0);
     }
 
     public double getAnchoSprite() {

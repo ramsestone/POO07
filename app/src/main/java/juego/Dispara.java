@@ -1,5 +1,5 @@
 package juego;
 
 public interface Dispara {
-    Proyectil disparar();
+    Proyectil crearProyectil();
 }

@@ -1,4 +1,5 @@
 package juego;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -18,24 +19,25 @@ public class Juego {
     private static final int ANCHO_PANTALLA = 1000;
     private static final int ALTO_PANTALLA = 600;
     private Lienzo mainLienzo;
-    // private ArrayList<NaveEnemiga> enemigos;
+    private ArrayList<ElementoGrafico> elementosGraficos;
     private Entrada gameInput;
-    private ArrayList<Proyectil> proyectilesEnPantalla;
 
     public Juego() {
         this.mainLienzo = new Lienzo();
-        this.gameInput = new Entrada(mainLienzo);
-        this.proyectilesEnPantalla = new ArrayList<>();
-
         this.mainLienzo.ponTamanioLienzo(ANCHO_PANTALLA, ALTO_PANTALLA);
         this.mainLienzo.ponEscalaX(0, ANCHO_PANTALLA);
         this.mainLienzo.ponEscalaY(0, ALTO_PANTALLA);
+        this.gameInput = new Entrada(mainLienzo);
+
+        this.elementosGraficos = new ArrayList<>();
 
         jugador = new Jugador(NAVE_REBELDE_SPRITE, ANCHO_PANTALLA, ALTO_PANTALLA, gameInput);
         enemigo = new AveDePresa(AVE_DE_PRESA_SPRITE, ANCHO_PANTALLA, ALTO_PANTALLA);
         jugador.aparecer(ANCHO_PANTALLA / 2, 12);
+        elementosGraficos.add(jugador);
 
         enemigo.aparecer(ANCHO_PANTALLA / 2, ALTO_PANTALLA - 72);
+        elementosGraficos.add(enemigo);
     }
 
     public static void main(String[] args) {
@@ -43,27 +45,10 @@ public class Juego {
         juego.startGameLoop();
     }
 
-    private void actualizarProyectiles(ArrayList<Proyectil> proyectiles, double deltaTime) {
-        Iterator<Proyectil> iterador = proyectiles.iterator();
-        while (iterador.hasNext()) {
-            Proyectil proyectil = iterador.next();
-            proyectil.actualizar(deltaTime);
-            proyectil.renderizar(mainLienzo);
-            if (!proyectil.esVisible) {
-                iterador.remove();
-            }
-
-            //DEBUG
-            System.out.println("" + proyectiles.size());
-
-        }
-    }
-
     private void startGameLoop() {
         boolean isRunning = true;
         // Implementación de deltatime para manejo correcto de frames
         long lastTime = System.currentTimeMillis();
-        Entrada gameInput = new Entrada(mainLienzo);
 
         while (isRunning) {
             long currentTime = System.currentTimeMillis();
@@ -72,33 +57,39 @@ public class Juego {
 
             // Prepara pantalla para siguiente frame
             mainLienzo.limpia();
+            // TODO: Hacer que el fondo herede de ElementoGrafico
             mainLienzo.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, FONDO);
 
             // =======================================================================================
-            // Procesar Inputs
+            // Procesar inputs del jugador
             // =======================================================================================
-            if (gameInput.disparoPres()) {
-                Proyectil laser = jugador.disparar();
-                if (laser != null) {
-                    proyectilesEnPantalla.add(laser);                
+            if (jugador.isDisparando()) {
+                Proyectil proyectil = jugador.crearProyectil();
+                if (proyectil != null) {
+                    elementosGraficos.add(proyectil);
                 }
             }
 
-            jugador.actualizar(deltaTime);
-
             // =======================================================================================
-            // Actualizacion de los proyectiles
+            // Actualizacion de elementos graficos.
             // =======================================================================================
-            actualizarProyectiles(proyectilesEnPantalla, deltaTime);
-
-            // =======================================================================================
-            // Actualizacion del jugador
-            // =======================================================================================
-            jugador.renderizar(mainLienzo);
-            enemigo.renderizar(mainLienzo);
+            actualizarElementosGráficos(deltaTime);
 
             mainLienzo.mostrar(16);
         }
     }
 
+    private void actualizarElementosGráficos(double deltaTime) {
+        Iterator<ElementoGrafico> iterator = elementosGraficos.iterator();
+        while (iterator.hasNext()) {
+            ElementoGrafico elemento = iterator.next();
+            elemento.mover(deltaTime);
+            if (!elemento.isVisible()) {
+                iterator.remove();
+            }
+            else {
+                elemento.renderizar(mainLienzo);
+            }
+        }
+    }
 }

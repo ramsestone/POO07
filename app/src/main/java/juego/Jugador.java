@@ -1,9 +1,11 @@
 package juego;
 
+import edu.epromero.util.Destruible;
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
-public class Jugador extends ElementoGrafico implements Dispara {
+// TODO: Agregar interfaz Destruible y otra
+public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, Dispara{
 
     // Segundos que se tarda en ir de extremo a extremo de la pantalla
     private final int SEGUNDOS_RECORRIDO = 5;
@@ -16,6 +18,11 @@ public class Jugador extends ElementoGrafico implements Dispara {
     private Entrada gameInput;
 
     private SistemaDeArmamento canionLaser;
+    private boolean disparando;
+
+    public boolean isDisparando() {
+        return disparando;
+    }
 
     // BPS = Balas Por Segundo
     private final double BPS = 3;
@@ -35,22 +42,19 @@ public class Jugador extends ElementoGrafico implements Dispara {
     }
 
     @Override
-    public ProyectilAzul disparar() {
+    public Proyectil crearProyectil() {
         if (canionLaser.puedeDisparar()) {
             canionLaser.reiniciarEnfriamiento();
-            ProyectilAzul laser = new ProyectilAzul(anchoPantalla, altoPantalla);
-            laser.aparecer(posX, posY + Y_OFFSET);
-            return laser;
+            ProyectilAzul proyectil = new ProyectilAzul(anchoPantalla, altoPantalla);
+            proyectil.aparecer(posX, posY + Y_OFFSET);
+            return proyectil;
         }
         return null;
     }
 
-    public void actualizar(double deltaTime) {
+    public void mover(double deltaTime) {
         if (!esVisible)
             return;
-
-        //DEBUG
-        // System.out.println(posX);
 
         // Calcular la distancia para el frame actual
         double distanciaFrame = this.velocidadJugador * deltaTime;
@@ -65,9 +69,7 @@ public class Jugador extends ElementoGrafico implements Dispara {
             this.posX += distanciaFrame;
         }
 
-        if (gameInput.disparoPres()) {
-            disparar();
-        }
+        this.disparando = gameInput.disparoPres() ? true : false;
 
         // Gestionar limites de la pantalla
         if (this.posX <= 0) {

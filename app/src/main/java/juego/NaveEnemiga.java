@@ -12,11 +12,4 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible,
         super(sprite, anchoPantalla, altoPantalla);
     }
 
-    @Override
-    public void aparecer(double posInicialX, double posInicialY) {
-        this.posX = posInicialX;
-        this.posY = posInicialY;
-        this.esVisible = true;
-    }
-
 }

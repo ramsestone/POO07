@@ -11,15 +11,20 @@ public class AveDePresa extends NaveEnemiga {
     }
 
     @Override
-    public Proyectil disparar() {
+    public Proyectil crearProyectil() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void actualizar(double deltaTime) {
+    public void aparecer(double posInicialX, double posInicialY) {
         // TODO Auto-generated method stub
-        
+        super.aparecer(posInicialX, posInicialY);
+    }
+
+    @Override
+    public void mover(double deltaTime) {
+        // TODO Auto-generated method stub
     }
 
     @Override
