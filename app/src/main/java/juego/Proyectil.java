@@ -8,7 +8,6 @@ public abstract class Proyectil extends ElementoGrafico {
     protected Imagen sprite;
     protected final double VELOCIDAD_PROYECTIL = 1000;
     protected final double outboundsOffset = 50;
-    protected boolean isInBounds;
 
     /**
      * Crea un nuevo sistema de armamento.

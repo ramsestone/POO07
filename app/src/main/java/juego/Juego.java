@@ -3,7 +3,6 @@ package juego;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
 public class Juego {
@@ -23,6 +22,7 @@ public class Juego {
     private static final int ALTO_PANTALLA = 600;
     private Lienzo mainLienzo;
     private ArrayList<ElementoGrafico> elementosGraficos;
+    private ArrayList<NaveEnemiga> enemigos;
     private Entrada gameInput;
 
     public Juego() {
@@ -33,13 +33,15 @@ public class Juego {
         this.gameInput = new Entrada(mainLienzo);
 
         this.elementosGraficos = new ArrayList<>();
+        this.enemigos = new ArrayList<>();
 
         jugador = new Jugador(Assets.JUGADOR, ANCHO_PANTALLA, ALTO_PANTALLA, gameInput);
         enemigo = new AveDePresa(Assets.AVE_DE_PRESA, ANCHO_PANTALLA, ALTO_PANTALLA);
         jugador.aparecer(ANCHO_PANTALLA / 2, 12);
         elementosGraficos.add(jugador);
 
-        enemigo.aparecer(ANCHO_PANTALLA / 2, ALTO_PANTALLA - 72);
+        enemigo.aparecer(ANCHO_PANTALLA + 50 , ALTO_PANTALLA - 72);
+        enemigos.add(enemigo);
         elementosGraficos.add(enemigo);
     }
 
@@ -76,13 +78,20 @@ public class Juego {
             // =======================================================================================
             // Actualizacion de elementos graficos.
             // =======================================================================================
-            actualizarElementosGráficos(deltaTime);
+            crearProyectilesEnemigos(deltaTime);
             verificarColisiones(deltaTime);
-
+            
+            actualizarElementosGráficos(deltaTime);
             mainLienzo.mostrar(16);
         }
     }
-
+    
+    /**
+     * Actualiza todos los elementos gráficos.
+     * 
+     * @param deltaTime El tiempo transcurrido (para futuras implementaciones
+     *                  físicas si es necesario).
+     */
     private void actualizarElementosGráficos(double deltaTime) {
         Iterator<ElementoGrafico> iterator = elementosGraficos.iterator();
         while (iterator.hasNext()) {
@@ -92,6 +101,20 @@ public class Juego {
                 iterator.remove();
             } else {
                 elemento.renderizar(mainLienzo);
+            }
+        }
+    }
+
+    /**
+     * Gestiona la creacion de proyectiles de todas las naves enemigas
+     */
+    private void crearProyectilesEnemigos(double deltaTime) {
+        Iterator<NaveEnemiga> iterator = enemigos.iterator();
+        while (iterator.hasNext()) {
+            NaveEnemiga nave = iterator.next();
+            Proyectil proyectil = nave.crearProyectil();
+            if (proyectil != null) {
+                elementosGraficos.add(proyectil);                
             }
         }
     }

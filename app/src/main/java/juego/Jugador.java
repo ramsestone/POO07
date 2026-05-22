@@ -7,7 +7,7 @@ import edu.epromero.util.Lienzo;
 public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, Dispara, Destruible {
 
     // Segundos que se tarda en ir de extremo a extremo de la pantalla
-    private final int SEGUNDOS_RECORRIDO = 5;
+    // private final int SEGUNDOS_RECORRIDO = 5;
 
     // Definimos offsets para delimitar los bordes del sprite
     private double X_OFFSET;
@@ -16,7 +16,7 @@ public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, 
 
     private Entrada gameInput;
 
-    private SistemaDeArmamento canionLaser;
+    private SistemaDeArmamento sistArmamento;
     private boolean disparando;
 
     public boolean isDisparando() {
@@ -28,9 +28,10 @@ public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, 
 
     public Jugador(Imagen sprite, double anchoPantalla, double altoPantalla, Entrada gameInput) {
         super(sprite, anchoPantalla, altoPantalla);
-        this.velocidadJugador = (anchoPantalla / this.SEGUNDOS_RECORRIDO);
+        // this.velocidadJugador = (anchoPantalla / this.SEGUNDOS_RECORRIDO);
+        this.velocidadJugador = 500;
         this.gameInput = gameInput;
-        this.canionLaser = new SistemaDeArmamento(BPS);
+        this.sistArmamento = new SistemaDeArmamento(BPS);
     }
 
     @Override
@@ -52,8 +53,8 @@ public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, 
 
     @Override
     public Proyectil crearProyectil() {
-        if (canionLaser.puedeDisparar()) {
-            canionLaser.reiniciarEnfriamiento();
+        if (sistArmamento.puedeDisparar()) {
+            sistArmamento.reiniciarEnfriamiento();
             ProyectilAzul proyectil = new ProyectilAzul(anchoPantalla, altoPantalla);
             proyectil.aparecer(posX, posY);
             return proyectil;
@@ -67,7 +68,7 @@ public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, 
 
         // Calcular la distancia para el frame actual
         double distanciaFrame = this.velocidadJugador * deltaTime;
-        canionLaser.actualizar(deltaTime);
+        sistArmamento.actualizar(deltaTime);
 
         // Gestionar movimiento
         if (gameInput.izquierdaPres()) {

@@ -3,24 +3,33 @@ package juego;
 import edu.epromero.util.Destruible;
 import edu.epromero.util.Imagen;
 
-public abstract class NaveEnemiga extends ElementoGrafico implements Destruible, Dispara {
+public abstract class NaveEnemiga extends ElementoGrafico implements Destruible {
     protected int puntosDeVida;
+    protected double balasPorSegundo;
     protected int valorEnPuntos;
     protected String tipoNave;
-    
+    protected double velocidadNave;
+    protected int factorMovimiento = 1;
+
     protected Imagen defaultSprite;
     protected Imagen hitSprite;
     protected boolean isTakingDamage;
     protected double damageTimer;
     protected final double DAMAGE_DURATION = 0.1;
 
+    protected SistemaDeArmamento sistArmamento;
+
     public NaveEnemiga(Imagen sprite, double anchoPantalla, double altoPantalla) {
         super(sprite, anchoPantalla, altoPantalla);
     }
 
     protected abstract void cambiarSpriteOnHit(double deltaTime, Imagen dmgSprite);
-    
+
     protected abstract Imagen getDamageSprite();
+
+    protected abstract void iaDeMovimiento(double deltaTime);
+
+    protected abstract ProyectilRojo crearProyectil();
 
     public boolean recibirDanio() {
         applyDamageEffect(this.getDamageSprite());
@@ -39,6 +48,14 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible,
         return this.valorEnPuntos;
     }
 
+    public void setVelocidadNave(double velocidadNave) {
+        this.velocidadNave = velocidadNave;
+    }
+
+    public void setSistArmamento(SistemaDeArmamento sistArmamento) {
+        this.sistArmamento = sistArmamento;
+    }
+
     /**
      * Activates the damage state only on the exact frame the collision occurs.
      * * @param dmgSprite The alternative sprite to display.
@@ -54,7 +71,7 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible,
         this.isTakingDamage = true;
         this.damageTimer = 0.0;
     }
-    
+
     protected void cambiarSprite(double deltaTime) {
         // Si la nave está en estado de daño, comenzamos a sumar el tiempo
         if (this.isTakingDamage) {
@@ -106,6 +123,7 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible,
     @Override
     public void actualizar(double deltaTime) {
         cambiarSprite(deltaTime);
+        this.sistArmamento.actualizar(deltaTime);
     }
 
 }

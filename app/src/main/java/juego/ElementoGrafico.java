@@ -8,6 +8,8 @@ import edu.epromero.util.Lienzo;
 public abstract class ElementoGrafico {
     protected double posX;
     protected double posY;
+    protected boolean isInBounds;
+
     // Offset es el valor que hay desde el centro hasta uno de sus bordes.
     protected double X_OFFSET;
     protected double Y_OFFSET;
@@ -64,8 +66,8 @@ public abstract class ElementoGrafico {
         }
         lienzo.dibujo(this.posX, this.posY, this.sprite);
         // DEBUG: Muestra los delimitadores de todos los elementos gráficos
-        lienzo.ponColorLapiz(Color.RED);
-        lienzo.rectangulo(posX, posY, anchoSprite / 2.0, altoSprite / 2.0);
+        // lienzo.ponColorLapiz(Color.RED);
+        // lienzo.rectangulo(posX, posY, anchoSprite / 2.0, altoSprite / 2.0);
     }
 
     public double getAnchoSprite() {
