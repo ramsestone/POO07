@@ -3,11 +3,14 @@ package juego;
 import edu.epromero.util.ComportamientoEnemigo;
 import edu.epromero.util.Imagen;
 
-@ComportamientoEnemigo(tipo = "AveDePresa", resistencia = 3, puntos = 10)
+@ComportamientoEnemigo(tipo = "Ave de Presa", resistencia = 3, puntos = 10)
 public class AveDePresa extends NaveEnemiga {
 
     public AveDePresa(Imagen sprite, double anchoPantalla, double altoPantalla) {
         super(sprite, anchoPantalla, altoPantalla);
+        this.puntosDeVida = 3;
+        this.valorEnPuntos = 10;
+        this.tipoNave = "Ave de Presa";
     }
 
     @Override
@@ -18,7 +21,6 @@ public class AveDePresa extends NaveEnemiga {
 
     @Override
     public void aparecer(double posInicialX, double posInicialY) {
-        // TODO Auto-generated method stub
         super.aparecer(posInicialX, posInicialY);
     }
 
@@ -37,6 +39,10 @@ public class AveDePresa extends NaveEnemiga {
     public int getVidasActuales() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    public int getPuntos() {
+        return this.valorEnPuntos;
     }
 
 }
