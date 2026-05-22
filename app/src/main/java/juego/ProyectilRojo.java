@@ -3,7 +3,7 @@ package juego;
 public class ProyectilRojo extends Proyectil{
     
     public ProyectilRojo(double anchoPantalla, double altoPantalla) {
-        super(Assets.PROYECTIL_AZUL, anchoPantalla, altoPantalla);
+        super(Assets.PROYECTIL_ROJO, anchoPantalla, altoPantalla);
     }
 
     @Override

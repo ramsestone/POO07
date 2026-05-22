@@ -32,7 +32,7 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
     protected abstract ProyectilRojo crearProyectil();
 
     public boolean recibirDanio() {
-        applyDamageEffect(this.getDamageSprite());
+        aplicarEfectoDanio(this.getDamageSprite());
         this.puntosDeVida -= 1;
         if (puntosDeVida > 0) {
             return false;
@@ -60,7 +60,7 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
      * Activates the damage state only on the exact frame the collision occurs.
      * * @param dmgSprite The alternative sprite to display.
      */
-    protected void applyDamageEffect(Imagen dmgSprite) {
+    protected void aplicarEfectoDanio(Imagen dmgSprite) {
         if (!this.isTakingDamage) {
             this.defaultSprite = this.sprite;
         }
@@ -70,6 +70,10 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
 
         this.isTakingDamage = true;
         this.damageTimer = 0.0;
+    }
+
+    protected void AplicarEfectoMuerte() {
+        // TODO IMPLEMENTAR
     }
 
     protected void cambiarSprite(double deltaTime) {

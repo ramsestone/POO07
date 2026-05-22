@@ -6,7 +6,7 @@ import edu.epromero.util.Lienzo;
 public abstract class Proyectil extends ElementoGrafico {
 
     protected Imagen sprite;
-    protected final double VELOCIDAD_PROYECTIL = 1000;
+    protected final double VELOCIDAD_PROYECTIL = 750;
     protected final double outboundsOffset = 50;
 
     /**

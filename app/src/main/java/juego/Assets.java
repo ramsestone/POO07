@@ -22,5 +22,6 @@ public final class Assets {
     public static final Imagen AVE_DE_PRESA = new Imagen(BASE_PATH + "ave_de_presa.png");
     public static final Imagen AVE_DE_PRESA_NEGATIVA = new Imagen(BASE_PATH + "ave_de_presa_negative.png");
     public static final Imagen PROYECTIL_AZUL = new Imagen(BASE_PATH + "proyectil_azul.png");
+    public static final Imagen PROYECTIL_ROJO = new Imagen(BASE_PATH + "proyectil_rojo.png");
     // Si decides cambiar la ruta, solo modificas la constante BASE_PATH
 }
