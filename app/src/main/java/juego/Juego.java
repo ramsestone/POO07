@@ -12,9 +12,12 @@ public class Juego {
     AveDePresa enemigo;
 
     // Definimos los sprites que vamos a usar
-    private static final Imagen FONDO = new Imagen("app/src/main/resources/background_blue.png");
-    private static final Imagen NAVE_REBELDE_SPRITE = new Imagen("app/src/main/resources/nave_rebelde.png");
-    private static final Imagen AVE_DE_PRESA_SPRITE = new Imagen("app/src/main/resources/ave_de_presa.png");
+    // private static final Imagen FONDO = new
+    // Imagen("../resources/background_blue.png");
+    // private static final Imagen NAVE_REBELDE_SPRITE = new
+    // Imagen("../resources/nave_rebelde.png");
+    // private static final Imagen AVE_DE_PRESA_SPRITE = new
+    // Imagen("../resources/ave_de_presa.png");
 
     private static final int ANCHO_PANTALLA = 1000;
     private static final int ALTO_PANTALLA = 600;
@@ -31,8 +34,8 @@ public class Juego {
 
         this.elementosGraficos = new ArrayList<>();
 
-        jugador = new Jugador(NAVE_REBELDE_SPRITE, ANCHO_PANTALLA, ALTO_PANTALLA, gameInput);
-        enemigo = new AveDePresa(AVE_DE_PRESA_SPRITE, ANCHO_PANTALLA, ALTO_PANTALLA);
+        jugador = new Jugador(Assets.JUGADOR, ANCHO_PANTALLA, ALTO_PANTALLA, gameInput);
+        enemigo = new AveDePresa(Assets.AVE_DE_PRESA, ANCHO_PANTALLA, ALTO_PANTALLA);
         jugador.aparecer(ANCHO_PANTALLA / 2, 12);
         elementosGraficos.add(jugador);
 
@@ -58,7 +61,7 @@ public class Juego {
             // Prepara pantalla para siguiente frame
             mainLienzo.limpia();
             // TODO: Hacer que el fondo herede de ElementoGrafico
-            mainLienzo.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, FONDO);
+            mainLienzo.dibujo(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2, Assets.FONDO);
 
             // =======================================================================================
             // Procesar inputs del jugador
@@ -74,6 +77,7 @@ public class Juego {
             // Actualizacion de elementos graficos.
             // =======================================================================================
             actualizarElementosGráficos(deltaTime);
+            verificarColisiones(deltaTime);
 
             mainLienzo.mostrar(16);
         }
@@ -83,12 +87,49 @@ public class Juego {
         Iterator<ElementoGrafico> iterator = elementosGraficos.iterator();
         while (iterator.hasNext()) {
             ElementoGrafico elemento = iterator.next();
-            elemento.mover(deltaTime);
+            elemento.actualizar(deltaTime);
             if (!elemento.isVisible()) {
                 iterator.remove();
-            }
-            else {
+            } else {
                 elemento.renderizar(mainLienzo);
+            }
+        }
+    }
+
+    /**
+     * Verifica las colisiones entre los proyectiles y las naves enemigas.
+     * 
+     * @param deltaTime El tiempo transcurrido (para futuras implementaciones
+     *                  físicas si es necesario).
+     */
+    private void verificarColisiones(double deltaTime) {
+
+        for (ElementoGrafico elementoGrafico1 : elementosGraficos) {
+
+            // 1. Encontramos un proyectil en la lista
+            if (elementoGrafico1 instanceof ProyectilAzul) {
+                ProyectilAzul proyectil = (ProyectilAzul) elementoGrafico1;
+
+                for (ElementoGrafico elementoGrafico2 : elementosGraficos) {
+
+                    // 2. CORRECCIÓN: Evaluamos el elemento 2, no el 1
+                    if (elementoGrafico2 instanceof NaveEnemiga) {
+                        NaveEnemiga nave = (NaveEnemiga) elementoGrafico2;
+
+                        // 3. Comprobamos la superposición (AABB)
+                        if (nave.hayColision(proyectil)) {
+
+                            // ¡Impacto confirmado!
+                            if (nave.recibirDanio()) {
+                                nave.setEsVisible(false);
+                            }
+
+                            // MEJORA 1: La bala también debe desaparecer al impactar
+                            proyectil.setEsVisible(false);
+                            return;
+                        }
+                    }
+                }
             }
         }
     }

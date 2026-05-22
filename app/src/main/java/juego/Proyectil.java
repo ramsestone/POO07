@@ -22,12 +22,13 @@ public abstract class Proyectil extends ElementoGrafico {
         this.sprite = new Imagen(sprite);
     }
 
-    public void mover(double deltaTime) {
+    public void actualizar(double deltaTime) {
         if (!esVisible)
             return;
 
         // Revisa si está dentro de la ventana cada frame
-        this.isInBounds = (posX >= - outboundsOffset && posX < anchoPantalla + outboundsOffset) && (posY >= - outboundsOffset && posY <= altoPantalla + outboundsOffset);
+        this.isInBounds = (posX >= -outboundsOffset && posX < anchoPantalla + outboundsOffset)
+                && (posY >= -outboundsOffset && posY <= altoPantalla + outboundsOffset);
         if (!isInBounds) {
             esVisible = false;
         }

@@ -11,6 +11,24 @@ public class AveDePresa extends NaveEnemiga {
         this.puntosDeVida = 3;
         this.valorEnPuntos = 10;
         this.tipoNave = "Ave de Presa";
+        this.hitSprite = Assets.AVE_DE_PRESA_NEGATIVA;
+    }
+
+    /**
+     * Se activa únicamente en el fotograma exacto en el que ocurre la colisión.
+     * 
+     * @param dmgSprite El sprite alternativo a mostrar.
+     */
+    @Override
+    protected void cambiarSpriteOnHit(double deltaTime, Imagen dmgSprite) {
+        this.sprite = dmgSprite;
+        this.hitSprite = dmgSprite;
+        this.damageTimer = 0.0;
+    }
+
+    @Override
+    public boolean recibirDanio() {
+        return super.recibirDanio();
     }
 
     @Override
@@ -25,24 +43,7 @@ public class AveDePresa extends NaveEnemiga {
     }
 
     @Override
-    public void mover(double deltaTime) {
-        // TODO Auto-generated method stub
+    protected Imagen getDamageSprite() {
+        return Assets.AVE_DE_PRESA_NEGATIVA;
     }
-
-    @Override
-    public boolean recibirDanio() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public int getVidasActuales() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public int getPuntos() {
-        return this.valorEnPuntos;
-    }
-
 }

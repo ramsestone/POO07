@@ -4,8 +4,7 @@ import edu.epromero.util.Destruible;
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
-// TODO: Agregar interfaz Destruible y otra
-public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, Dispara{
+public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, Dispara, Destruible {
 
     // Segundos que se tarda en ir de extremo a extremo de la pantalla
     private final int SEGUNDOS_RECORRIDO = 5;
@@ -30,10 +29,20 @@ public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, 
     public Jugador(Imagen sprite, double anchoPantalla, double altoPantalla, Entrada gameInput) {
         super(sprite, anchoPantalla, altoPantalla);
         this.velocidadJugador = (anchoPantalla / this.SEGUNDOS_RECORRIDO);
-        this.X_OFFSET = this.getAnchoSprite() / 2;
-        this.Y_OFFSET = this.getAltoSprite() / 2;
         this.gameInput = gameInput;
         this.canionLaser = new SistemaDeArmamento(BPS);
+    }
+
+    @Override
+    public boolean recibirDanio() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public int getVidasActuales() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     @Override
@@ -46,13 +55,13 @@ public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, 
         if (canionLaser.puedeDisparar()) {
             canionLaser.reiniciarEnfriamiento();
             ProyectilAzul proyectil = new ProyectilAzul(anchoPantalla, altoPantalla);
-            proyectil.aparecer(posX, posY + Y_OFFSET);
+            proyectil.aparecer(posX, posY);
             return proyectil;
         }
         return null;
     }
 
-    public void mover(double deltaTime) {
+    public void actualizar(double deltaTime) {
         if (!esVisible)
             return;
 
@@ -86,11 +95,11 @@ public class Jugador extends ElementoGrafico implements GeneradorDeProyectiles, 
     }
 
     public double getX_OFFSET() {
-        return X_OFFSET;
+        return this.X_OFFSET;
     }
 
     public double getY_OFFSET() {
-        return Y_OFFSET;
+        return this.Y_OFFSET;
     }
 
     public double getVelocidadJugador() {

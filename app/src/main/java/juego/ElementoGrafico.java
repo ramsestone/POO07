@@ -8,7 +8,15 @@ import edu.epromero.util.Lienzo;
 public abstract class ElementoGrafico {
     protected double posX;
     protected double posY;
+    // Offset es el valor que hay desde el centro hasta uno de sus bordes.
+    protected double X_OFFSET;
+    protected double Y_OFFSET;
     protected boolean esVisible;
+
+    public void setEsVisible(boolean esVisible) {
+        this.esVisible = esVisible;
+    }
+
     protected Imagen sprite;
     // Dimensiones de la pantalla donde vive el ElemntoGrafico
     protected double anchoPantalla;
@@ -22,13 +30,15 @@ public abstract class ElementoGrafico {
     public ElementoGrafico(Imagen sprite, double anchoPantalla, double altoPantalla) {
         this.esVisible = false;
         this.sprite = sprite;
-        this.anchoPantalla = anchoPantalla;
-        this.altoPantalla = altoPantalla;
         this.anchoSprite = this.sprite.ancho();
         this.altoSprite = this.sprite.alto();
+        this.anchoPantalla = anchoPantalla;
+        this.altoPantalla = altoPantalla;
+        this.X_OFFSET = this.getAnchoSprite() / 2;
+        this.Y_OFFSET = this.getAltoSprite() / 2;
     }
 
-    public abstract void mover(double deltaTime);
+    public abstract void actualizar(double deltaTime);
 
     public double getX() {
         return this.posX;
