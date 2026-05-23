@@ -1,11 +1,18 @@
 package juego;
 
+import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
 public class ProyectilAzul extends Proyectil {
 
-    public ProyectilAzul(double anchoPantalla, double altoPantalla) {
-        super(Assets.PROYECTIL_AZUL, anchoPantalla, altoPantalla);
+    public ProyectilAzul() {
+        setSprite(Assets.PROYECTIL_AZUL);
+        initHitBox();
+    }
+
+    @Override
+    protected void setSprite(Imagen sprite) {
+        this.sprite = sprite;
     }
 
     @Override

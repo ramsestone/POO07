@@ -6,8 +6,10 @@ import edu.epromero.util.Imagen;
 @ComportamientoEnemigo(tipo = "Ave de Presa", resistencia = 3, puntos = 10)
 public class AveDePresa extends NaveEnemiga implements Dispara {
 
-    public AveDePresa(Imagen sprite, double anchoPantalla, double altoPantalla) {
-        super(sprite, anchoPantalla, altoPantalla);
+    public AveDePresa() {
+        setSprite(Assets.AVE_DE_PRESA);
+        initHitBox();
+
         this.puntosDeVida = 3;
         this.valorEnPuntos = 10;
         this.balasPorSegundo = 1d / 3;
@@ -33,17 +35,17 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
     public boolean recibirDanio() {
         return super.recibirDanio();
     }
-    
+
     @Override
     public void aparecer(double posInicialX, double posInicialY) {
         super.aparecer(posInicialX, posInicialY);
     }
-    
+
     @Override
     public ProyectilRojo crearProyectil() {
         if (sistArmamento.puedeDisparar()) {
             sistArmamento.reiniciarEnfriamiento();
-            ProyectilRojo proyectil = new ProyectilRojo(anchoPantalla, altoPantalla);
+            ProyectilRojo proyectil = new ProyectilRojo();
             proyectil.aparecer(posX, posY);
             return proyectil;
         }
@@ -51,7 +53,7 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
     }
 
     protected void iaDeMovimiento(double deltaTime) {
-        if (!isInBounds && this.posX >= 0 && this.posX <= anchoPantalla) {
+        if (!isInBounds && this.posX >= 0 && this.posX <= Juego.getAnchoPantalla()) {
             isInBounds = true;
         }
         // Estado A: La nave ya está en la zona de juego (Patrullaje)
@@ -60,7 +62,7 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
             this.posX += (this.velocidadNave * deltaTime) * this.factorMovimiento;
 
             // Verificamos si chocó con un borde para invertir la dirección
-            if (this.posX >= this.anchoPantalla || this.posX <= 0) {
+            if (this.posX >= Juego.getAnchoPantalla() || this.posX <= 0) {
                 this.factorMovimiento *= -1;
             }
 
@@ -86,5 +88,10 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
     @Override
     protected Imagen getDamageSprite() {
         return Assets.AVE_DE_PRESA_NEGATIVA;
+    }
+
+    @Override
+    protected void setSprite(Imagen sprite) {
+        this.sprite = sprite;
     }
 }

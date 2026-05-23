@@ -7,7 +7,7 @@ import edu.epromero.util.Lienzo;
 
 public class Juego {
 
-    private static Jugador jugador;
+    private static Heroe heroe;
     AveDePresa enemigo;
 
     // Definimos los sprites que vamos a usar
@@ -19,28 +19,31 @@ public class Juego {
     // Imagen("../resources/ave_de_presa.png");
 
     private static final int ANCHO_PANTALLA = 1000;
+
     private static final int ALTO_PANTALLA = 600;
     private Lienzo mainLienzo;
     private ArrayList<ElementoGrafico> elementosGraficos;
     private ArrayList<NaveEnemiga> enemigos;
-    private Entrada gameInput;
+    private static Entrada gameInput;
 
     public Juego() {
         this.mainLienzo = new Lienzo();
         this.mainLienzo.ponTamanioLienzo(ANCHO_PANTALLA, ALTO_PANTALLA);
         this.mainLienzo.ponEscalaX(0, ANCHO_PANTALLA);
         this.mainLienzo.ponEscalaY(0, ALTO_PANTALLA);
-        this.gameInput = new Entrada(mainLienzo);
+        gameInput = new Entrada(mainLienzo);
 
         this.elementosGraficos = new ArrayList<>();
         this.enemigos = new ArrayList<>();
 
-        jugador = new Jugador(Assets.JUGADOR, ANCHO_PANTALLA, ALTO_PANTALLA, gameInput);
-        enemigo = new AveDePresa(Assets.AVE_DE_PRESA, ANCHO_PANTALLA, ALTO_PANTALLA);
-        jugador.aparecer(ANCHO_PANTALLA / 2, 12);
-        elementosGraficos.add(jugador);
-
-        enemigo.aparecer(ANCHO_PANTALLA + 50 , ALTO_PANTALLA - 72);
+        heroe = new Heroe();
+        heroe.setGameInput(gameInput);
+        heroe.aparecer(ANCHO_PANTALLA / 2, 12);
+        elementosGraficos.add(heroe);
+        
+        enemigo = new AveDePresa();
+        enemigo.setSprite(Assets.AVE_DE_PRESA);
+        enemigo.aparecer(ANCHO_PANTALLA + 50, ALTO_PANTALLA - 72);
         enemigos.add(enemigo);
         elementosGraficos.add(enemigo);
     }
@@ -68,8 +71,8 @@ public class Juego {
             // =======================================================================================
             // Procesar inputs del jugador
             // =======================================================================================
-            if (jugador.isDisparando()) {
-                Proyectil proyectil = jugador.crearProyectil();
+            if (heroe.isDisparando()) {
+                Proyectil proyectil = heroe.crearProyectil();
                 if (proyectil != null) {
                     elementosGraficos.add(proyectil);
                 }
@@ -80,17 +83,17 @@ public class Juego {
             // =======================================================================================
             crearProyectilesEnemigos(deltaTime);
             verificarColisiones(deltaTime);
-            
+
             actualizarElementosGráficos(deltaTime);
             mainLienzo.mostrar(16);
         }
     }
-    
+
     /**
      * Actualiza todos los elementos gráficos.
      * 
-     * @param deltaTime El tiempo transcurrido (para futuras implementaciones
-     *                  físicas si es necesario).
+     * @param deltaTime El tiempo transcurrido (para futuras implementaciones físicas si es
+     *        necesario).
      */
     private void actualizarElementosGráficos(double deltaTime) {
         Iterator<ElementoGrafico> iterator = elementosGraficos.iterator();
@@ -114,7 +117,7 @@ public class Juego {
             NaveEnemiga nave = iterator.next();
             Proyectil proyectil = nave.crearProyectil();
             if (proyectil != null) {
-                elementosGraficos.add(proyectil);                
+                elementosGraficos.add(proyectil);
             }
         }
     }
@@ -122,8 +125,8 @@ public class Juego {
     /**
      * Verifica las colisiones entre los proyectiles y las naves enemigas.
      * 
-     * @param deltaTime El tiempo transcurrido (para futuras implementaciones
-     *                  físicas si es necesario).
+     * @param deltaTime El tiempo transcurrido (para futuras implementaciones físicas si es
+     *        necesario).
      */
     private void verificarColisiones(double deltaTime) {
 
@@ -155,5 +158,17 @@ public class Juego {
                 }
             }
         }
+    }
+
+    public static int getAnchoPantalla() {
+      return ANCHO_PANTALLA;
+    }
+
+    public static int getAltoPantalla() {
+      return ALTO_PANTALLA;
+    }
+
+    public static Entrada getGameInput() {
+        return gameInput;
     }
 }

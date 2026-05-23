@@ -19,10 +19,6 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
 
     protected SistemaDeArmamento sistArmamento;
 
-    public NaveEnemiga(Imagen sprite, double anchoPantalla, double altoPantalla) {
-        super(sprite, anchoPantalla, altoPantalla);
-    }
-
     protected abstract void cambiarSpriteOnHit(double deltaTime, Imagen dmgSprite);
 
     protected abstract Imagen getDamageSprite();
@@ -57,8 +53,8 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
     }
 
     /**
-     * Activates the damage state only on the exact frame the collision occurs.
-     * * @param dmgSprite The alternative sprite to display.
+     * Activates the damage state only on the exact frame the collision occurs. * @param dmgSprite
+     * The alternative sprite to display.
      */
     protected void aplicarEfectoDanio(Imagen dmgSprite) {
         if (!this.isTakingDamage) {
@@ -97,16 +93,16 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
     // (azules)
     public boolean hayColision(ProyectilAzul proyectil) {
         // Limites de este elemento
-        double miIzquierda = this.posX - this.X_OFFSET;
-        double miDerecha = this.posX + this.X_OFFSET;
-        double miArriba = this.posY + this.Y_OFFSET;
-        double miAbajo = this.posY - this.Y_OFFSET;
+        double miIzquierda = this.posX - this.xOffset;
+        double miDerecha = this.posX + this.xOffset;
+        double miArriba = this.posY + this.yOffset;
+        double miAbajo = this.posY - this.yOffset;
 
         // Limites del proyectil
-        double suIzquierda = proyectil.posX - proyectil.X_OFFSET;
-        double suDerecha = proyectil.posX + proyectil.X_OFFSET;
-        double suArriba = proyectil.posY + proyectil.Y_OFFSET;
-        double suAbajo = proyectil.posY - proyectil.Y_OFFSET;
+        double suIzquierda = proyectil.posX - proyectil.xOffset;
+        double suDerecha = proyectil.posX + proyectil.xOffset;
+        double suArriba = proyectil.posY + proyectil.yOffset;
+        double suAbajo = proyectil.posY - proyectil.yOffset;
 
         // 3. Aplicamos la lógica inversa: ¿Están separados?
         boolean estaDemasiadoALaIzquierda = miDerecha < suIzquierda;
@@ -115,7 +111,8 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
         boolean estaDemasiadoArriba = miAbajo > suArriba;
 
         // Si alguna de las condiciones es verdadera, NO hay colisión.
-        if (estaDemasiadoALaIzquierda || estaDemasiadoALaDerecha || estaDemasiadoAbajo || estaDemasiadoArriba) {
+        if (estaDemasiadoALaIzquierda || estaDemasiadoALaDerecha || estaDemasiadoAbajo
+                || estaDemasiadoArriba) {
             return false;
         }
 

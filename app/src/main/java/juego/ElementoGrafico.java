@@ -1,46 +1,46 @@
 package juego;
 
-import java.awt.Color;
-
-import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
+import edu.epromero.util.Imagen;
 
 public abstract class ElementoGrafico {
     protected double posX;
     protected double posY;
+    protected double velocidadElemento;
+
     protected boolean isInBounds;
 
-    // Offset es el valor que hay desde el centro hasta uno de sus bordes.
-    protected double X_OFFSET;
-    protected double Y_OFFSET;
-    protected boolean esVisible;
-
-    public void setEsVisible(boolean esVisible) {
-        this.esVisible = esVisible;
-    }
-
     protected Imagen sprite;
-    // Dimensiones de la pantalla donde vive el ElemntoGrafico
-    protected double anchoPantalla;
-    protected double altoPantalla;
-    // Dimensiones del sprite
     protected double anchoSprite;
     protected double altoSprite;
+
+    protected double anchoPantalla;
+    protected double altoPantalla;
+
+    // Offset es el valor que hay desde el centro hasta uno de sus bordes.
+    protected double xOffset;
+    protected double yOffset;
+    protected boolean esVisible;
+
+
     // Lienzo
     protected Lienzo lienzo;
 
-    public ElementoGrafico(Imagen sprite, double anchoPantalla, double altoPantalla) {
+    public ElementoGrafico() {
         this.esVisible = false;
-        this.sprite = sprite;
-        this.anchoSprite = this.sprite.ancho();
-        this.altoSprite = this.sprite.alto();
-        this.anchoPantalla = anchoPantalla;
-        this.altoPantalla = altoPantalla;
-        this.X_OFFSET = this.getAnchoSprite() / 2;
-        this.Y_OFFSET = this.getAltoSprite() / 2;
+        this.anchoPantalla = Juego.getAnchoPantalla();
+        this.altoPantalla = Juego.getAltoPantalla();
     }
 
     public abstract void actualizar(double deltaTime);
+
+    protected void initHitBox() {
+        this.anchoSprite = this.sprite.ancho();
+        this.altoSprite = this.sprite.alto();
+
+        this.xOffset = this.anchoSprite / 2.0;
+        this.yOffset = this.altoSprite / 2.0;
+    }
 
     public double getX() {
         return this.posX;
@@ -64,17 +64,24 @@ public abstract class ElementoGrafico {
         if (!esVisible) {
             return;
         }
-        lienzo.dibujo(this.posX, this.posY, this.sprite);
+        lienzo.dibujo(posX, posY, sprite);
         // DEBUG: Muestra los delimitadores de todos los elementos gráficos
         // lienzo.ponColorLapiz(Color.RED);
         // lienzo.rectangulo(posX, posY, anchoSprite / 2.0, altoSprite / 2.0);
     }
 
-    public double getAnchoSprite() {
-        return anchoSprite;
+    protected abstract void setSprite(Imagen sprite);
+
+    public void setEsVisible(boolean esVisible) {
+        this.esVisible = esVisible;
     }
 
-    public double getAltoSprite() {
-        return altoSprite;
+    public void setVelocidadElemento(double velocidadElemento) {
+        this.velocidadElemento = velocidadElemento;
     }
+
+    public double getVelocidadElemento() {
+        return this.velocidadElemento;
+    }
+
 }
