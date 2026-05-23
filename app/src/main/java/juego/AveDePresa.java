@@ -1,5 +1,6 @@
 package juego;
 
+import java.util.ArrayList;
 import edu.epromero.util.ComportamientoEnemigo;
 import edu.epromero.util.Imagen;
 
@@ -9,13 +10,13 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
     public AveDePresa() {
         setSprite(new Imagen(Assets.AVE_DE_PRESA));
         initHitBox();
-        this.setPosInicialX(- 75);
+        this.setPosInicialX(-75);
         this.setPosInicialY(this.altoPantalla - 75);
 
         this.tipoNave = "Ave de Presa";
         this.puntosDeVida = 3;
         this.valorEnPuntos = 10;
-        
+
         this.balasPorSegundo = 1d / 3;
         this.hitSprite = new Imagen(Assets.AVE_DE_PRESA_NEGATIVA);
         this.setVelocidadNave(100);
@@ -34,13 +35,15 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
     }
 
     @Override
-    public ProyectilRojo crearProyectil() {
+    public ArrayList<Proyectil> crearProyectiles() {
         if (sistArmamento.puedeDisparar()) {
             sistArmamento.reiniciarEnfriamiento();
-            ProyectilRojo proyectil = new ProyectilRojo();
+            ArrayList<Proyectil> proyectiles = new ArrayList<>();
+            Proyectil proyectil = new ProyectilRojo();
+            proyectiles.add(proyectil);
             proyectil.setPosInicialX(posX);
             proyectil.setPosInicialY(posY);
-            return proyectil;
+            return proyectiles;
         }
         return null;
     }

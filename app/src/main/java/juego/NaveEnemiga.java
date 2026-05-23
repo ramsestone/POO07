@@ -1,5 +1,6 @@
 package juego;
 
+import java.util.ArrayList;
 import edu.epromero.util.Destruible;
 import edu.epromero.util.Imagen;
 
@@ -9,6 +10,7 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
     protected int valorEnPuntos;
     protected String tipoNave;
     protected double velocidadNave;
+    private double alturaDeseada;
     protected int factorMovimiento = 1;
 
     protected double ultimoDeltaTime = 0.0166;
@@ -28,9 +30,9 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
     }
 
     /**
-     * Método exigido por la auditoría automatizada.
-     * Actúa como un puente hacia la IA utilizando el último registro de tiempo.
-     * * @param entrada Los controles del juego (se ignoran porque el enemigo usa IA).
+     * Método exigido por la auditoría automatizada. Actúa como un puente hacia la
+     * IA utilizando el último registro de tiempo. * @param entrada Los controles
+     * del juego (se ignoran porque el enemigo usa IA).
      */
     public void Mueve(Entrada entrada) {
         this.iaDeMovimiento(this.ultimoDeltaTime);
@@ -40,7 +42,7 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
 
     protected abstract void iaDeMovimiento(double deltaTime);
 
-    protected abstract Proyectil crearProyectil();
+    protected abstract ArrayList<Proyectil> crearProyectiles();
 
     public boolean recibirDanio() {
         aplicarEfectoDanio(this.getDamageSprite());
@@ -69,8 +71,8 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
     }
 
     /**
-     * Activates the damage state only on the exact frame the collision occurs. * @param dmgSprite
-     * The alternative sprite to display.
+     * Activates the damage state only on the exact frame the collision occurs.
+     * * @param dmgSprite The alternative sprite to display.
      */
     protected void aplicarEfectoDanio(Imagen dmgSprite) {
         if (!this.isTakingDamage) {
@@ -144,6 +146,20 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
         iaDeMovimiento(deltaTime);
         cambiarSprite(deltaTime);
         this.sistArmamento.actualizar(deltaTime);
+    }
+
+    /**
+     * Asigna la altura deseada usando AltoDeLaPantalla -
+     * 
+     * @param deltaTime El tiempo transcurrido (para futuras implementaciones
+     *        físicas si es necesario).
+     */
+    public double getAlturaDeseada() {
+        return alturaDeseada;
+    }
+
+    public void setAlturaDeseada(double alturaDeseada) {
+        this.alturaDeseada = alturaDeseada;
     }
 
 }

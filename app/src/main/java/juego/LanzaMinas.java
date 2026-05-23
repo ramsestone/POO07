@@ -1,5 +1,6 @@
 package juego;
 
+import java.util.ArrayList;
 import edu.epromero.util.ComportamientoEnemigo;
 import edu.epromero.util.Imagen;
 
@@ -7,12 +8,15 @@ import edu.epromero.util.Imagen;
 public class LanzaMinas extends NaveEnemiga {
 
     public LanzaMinas() {
-        setSprite(new Imagen(Assets.DESTRUCTOR));
+        setSprite(new Imagen(Assets.LANZA_MINAS));
         initHitBox();
 
         this.setVelocidadNave(100);
         this.setPosInicialX(anchoPantalla / 2);
         this.setPosInicialY(this.altoPantalla - 75);
+
+        this.balasPorSegundo = 1.0 / 3.0;
+        this.sistArmamento = new SistemaDeArmamento(balasPorSegundo);
 
         this.tipoNave = "Lanza Minas";
         this.puntosDeVida = 4;
@@ -32,31 +36,45 @@ public class LanzaMinas extends NaveEnemiga {
 
     @Override
     protected Imagen getDamageSprite() {
-        // TODO Auto-generated method stub
-        return null;
+        return new Imagen(Assets.LANZA_MINAS_NEGATIVO);
     }
 
     @Override
-    protected ProyectilRojo crearProyectil() {
-        if (sistArmamento.puedeDisparar()) {
-            sistArmamento.reiniciarEnfriamiento();
-            ProyectilRojo proyectil = new ProyectilRojo();
-            proyectil.setPosInicialX(posX);
-            proyectil.setPosInicialY(posY);
-            return proyectil;
+    protected ArrayList<Proyectil> crearProyectiles() {
+        ArrayList<Proyectil> rafaga = new ArrayList<>();
+
+        if (this.sistArmamento.puedeDisparar()) {
+            this.sistArmamento.reiniciarEnfriamiento();
+
+            // Ciclo para crear las 8 balas
+            for (int i = 0; i < 8; i++) {
+                ProyectilVerde mina = new ProyectilVerde(); // O el color que le corresponda
+                mina.setPosInicialX(this.posX);
+                mina.setPosInicialY(this.posY);
+
+                // 1. Calculamos el ángulo en grados (0, 45, 90, 135...) y lo pasamos a radianes
+                double angulo = Math.toRadians(i * 45);
+
+                // 2. Extraemos los componentes vectoriales
+                double direccionX = Math.cos(angulo);
+                double direccionY = Math.sin(angulo);
+
+                // 3. Inyectamos la dirección geométrica en la bala
+                mina.setDireccion(direccionX, direccionY);
+
+                rafaga.add(mina);
+            }
         }
-        return null;
-    }
 
-    @Override
-    protected void cambiarSpriteOnHit(double deltaTime, Imagen dmgSprite) {
-        // TODO Auto-generated method stub
-
+        // Retornamos la lista completa al motor (puede estar vacía si está en
+        // enfriamiento)
+        return rafaga;
     }
 
     @Override
     protected void iaDeMovimiento(double deltaTime) {
-        if (!isInBounds && this.posX >= 0 && this.posX <= Juego.getAnchoPantalla()) {
+        if (!isInBounds && this.posY <= Juego.getAltoPantalla()
+                && this.posY <= getAlturaDeseada()) {
             isInBounds = true;
         }
         // Estado A: La nave ya está en la zona de juego (Patrullaje)
@@ -72,6 +90,9 @@ public class LanzaMinas extends NaveEnemiga {
         }
         // Estado B: La nave está fuera de la pantalla (Acercamiento)
         else {
+            if (this.posY >= getAlturaDeseada()) {
+                this.posY -= (this.velocidadNave * deltaTime) * this.factorMovimiento;
+            }
             if (this.posX < 0) {
                 // Si spawneó a la izquierda, la empujamos hacia la derecha
                 this.posX += (this.velocidadNave * deltaTime) * this.factorMovimiento;
@@ -81,5 +102,4 @@ public class LanzaMinas extends NaveEnemiga {
             }
         }
     }
-
 }

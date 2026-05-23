@@ -1,5 +1,7 @@
 package juego;
 
+import java.util.ArrayList;
+
 public interface Dispara {
-    Proyectil crearProyectil();
+    ArrayList<Proyectil> crearProyectiles();
 }

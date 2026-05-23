@@ -1,10 +1,11 @@
 package juego;
 
+import java.util.ArrayList;
 import edu.epromero.util.Destruible;
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
-public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Dispara, Destruible {
+public class Heroe extends ElementoGrafico implements Dispara, Destruible {
 
     private Entrada gameInput;
     private Imagen defaultSprite = new Imagen(Assets.HEROE);
@@ -35,7 +36,7 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
         this.sistArmamento = new SistemaDeArmamento(BPS);
     }
 
-    private void inicia() {
+    public void inicia() {
         setIsVisible(true);
         setVidas(3);
     }
@@ -43,7 +44,7 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
     @Override
     protected void setSprite(Imagen sprite) {
         this.sprite = sprite;
-        
+
     }
 
     @Override
@@ -55,6 +56,10 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
         }
         setIsVisible(false);
         return true;
+    }
+
+    public void perderVida() {
+        recibirDanio();
     }
 
     protected void aplicarEfectoDanio(Imagen dmgSprite) {
@@ -75,13 +80,15 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
     }
 
     @Override
-    public Proyectil crearProyectil() {
+    public ArrayList<Proyectil> crearProyectiles() {
         if (sistArmamento.puedeDisparar()) {
             sistArmamento.reiniciarEnfriamiento();
+            ArrayList<Proyectil> proyectiles = new ArrayList<>();
             ProyectilAzul proyectil = new ProyectilAzul();
+            proyectiles.add(proyectil);
             proyectil.setPosInicialX(posX);
             proyectil.setPosInicialY(posY);
-            return proyectil;
+            return proyectiles;
         }
         return null;
     }
@@ -135,9 +142,10 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
     }
 
     /**
-     * Evalúa geométricamente si un proyectil enemigo intercepta al héroe.
-     * Utiliza el algoritmo de Cajas Delimitadoras Alineadas a los Ejes (AABB).
-     * * @param proyectil El proyectil enemigo a evaluar.
+     * Evalúa geométricamente si un proyectil enemigo intercepta al héroe. Utiliza
+     * el algoritmo de Cajas Delimitadoras Alineadas a los Ejes (AABB). * @param
+     * proyectil El proyectil enemigo a evaluar.
+     * 
      * @return true si los hitboxes se superponen, false en caso contrario.
      */
     public boolean hayColision(Proyectil proyectil) {
@@ -160,8 +168,8 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
         boolean estaDemasiadoArriba = miAbajo > suArriba;
 
         // Si hay separación en cualquier eje, la colisión es matemáticamente imposible
-        if (estaDemasiadoALaIzquierda || estaDemasiadoALaDerecha || 
-            estaDemasiadoAbajo || estaDemasiadoArriba) {
+        if (estaDemasiadoALaIzquierda || estaDemasiadoALaDerecha || estaDemasiadoAbajo
+                || estaDemasiadoArriba) {
             return false;
         }
 
@@ -178,7 +186,7 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
     }
 
     public void setGameInput(Entrada gameInput) {
-      this.gameInput = gameInput;
+        this.gameInput = gameInput;
     }
 
     public int getPuntosGanados() {

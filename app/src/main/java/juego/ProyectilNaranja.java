@@ -5,9 +5,11 @@ import edu.epromero.util.Lienzo;
 
 public class ProyectilNaranja extends Proyectil{
     private int direccion;
+    private int offset;
 
     public ProyectilNaranja() {
         setSprite(new Imagen(Assets.PROYECTIL_ROJO));
+        this.offset = 45; 
         initHitBox();
     }
 
@@ -38,10 +40,10 @@ public class ProyectilNaranja extends Proyectil{
         if (!esVisible)
             return;
         if (direccion == 1) {
-            lienzo.dibujo(posX, posY, sprite, 45);
+            lienzo.dibujo(posX, posY, sprite, offset);
         }
         else {
-            lienzo.dibujo(posX, posY, sprite, - 45);           
+            lienzo.dibujo(posX, posY, sprite, - offset);           
         }
     }
 }

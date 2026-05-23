@@ -1,18 +1,17 @@
 package juego;
 
+import java.util.ArrayList;
 import edu.epromero.util.ComportamientoEnemigo;
 import edu.epromero.util.Imagen;
 
 @ComportamientoEnemigo(tipo = "Destructor", resistencia = 3, puntos = 50)
 public class Destructor extends NaveEnemiga {
-    private double alturaDeseada;
     private int direccionDeDisparo;
 
 
     public Destructor() {
         setSprite(new Imagen(Assets.DESTRUCTOR));
         initHitBox();
-        setAlturaDeseada(145);
 
         this.setVelocidadNave(100);
         this.setPosInicialX(anchoPantalla / 2);
@@ -44,15 +43,17 @@ public class Destructor extends NaveEnemiga {
     }
 
     @Override
-    protected ProyectilNaranja crearProyectil() {
+    protected ArrayList<Proyectil> crearProyectiles() {
         if (sistArmamento.puedeDisparar()) {
             sistArmamento.reiniciarEnfriamiento();
+            ArrayList<Proyectil> proyectiles = new ArrayList<>();
             ProyectilNaranja proyectil = new ProyectilNaranja();
+            proyectiles.add(proyectil);
             proyectil.setPosInicialX(posX);
             proyectil.setPosInicialY(posY);
             proyectil.setDireccion(direccionDeDisparo);
             cambiarDireccionDeDisparo();
-            return proyectil;
+            return proyectiles;
         }
         return null;
     }
@@ -63,7 +64,8 @@ public class Destructor extends NaveEnemiga {
 
     @Override
     protected void iaDeMovimiento(double deltaTime) {
-        if (!isInBounds && this.posY <= Juego.getAltoPantalla() && this.posY <= getAlturaDeseada()) {
+        if (!isInBounds && this.posY <= Juego.getAltoPantalla()
+                && this.posY <= getAlturaDeseada()) {
             isInBounds = true;
         }
         // Estado A: La nave ya está en la zona de juego (Patrullaje)
@@ -92,18 +94,4 @@ public class Destructor extends NaveEnemiga {
         }
 
     }
-    /**
-     * Asigna la altura deseada usando AltoDeLaPantalla - 
-     * 
-     * @param deltaTime El tiempo transcurrido (para futuras implementaciones físicas si es
-     *        necesario).
-     */
-    public double getAlturaDeseada() {
-        return alturaDeseada;
-    }
-
-    public void setAlturaDeseada(double alturaDeseada) {
-        this.alturaDeseada = Juego.getAltoPantalla() - alturaDeseada;
-    }
-
 }
