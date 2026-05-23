@@ -5,7 +5,7 @@ import edu.epromero.util.Imagen;
 public class ProyectilRojo extends Proyectil {
 
     public ProyectilRojo() {
-        setSprite(Assets.PROYECTIL_ROJO);
+        setSprite(new Imagen(Assets.PROYECTIL_ROJO));
         initHitBox();
     }
 

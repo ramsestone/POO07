@@ -6,7 +6,7 @@ import edu.epromero.util.Lienzo;
 public class ProyectilAzul extends Proyectil {
 
     public ProyectilAzul() {
-        setSprite(Assets.PROYECTIL_AZUL);
+        setSprite(new Imagen(Assets.PROYECTIL_AZUL));
         initHitBox();
     }
 

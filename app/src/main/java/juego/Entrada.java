@@ -6,6 +6,10 @@ import edu.epromero.util.Lienzo;
 public class Entrada {
     private Lienzo lienzo;
 
+    public Entrada() {
+        
+    }
+
     public Entrada(Lienzo lienzo) {
         this.lienzo = lienzo;
     }

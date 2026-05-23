@@ -6,6 +6,9 @@ import edu.epromero.util.Imagen;
 public abstract class ElementoGrafico {
     protected double posX;
     protected double posY;
+    protected double posInicialX;
+    protected double posInicialY;
+
     protected double velocidadElemento;
 
     protected boolean isInBounds;
@@ -42,11 +45,11 @@ public abstract class ElementoGrafico {
         this.yOffset = this.altoSprite / 2.0;
     }
 
-    public double getX() {
+    public double getColumna() {
         return this.posX;
     }
 
-    public double getY() {
+    public double getRenglon() {
         return this.posY;
     }
 
@@ -54,7 +57,7 @@ public abstract class ElementoGrafico {
         return this.esVisible;
     }
 
-    public void aparecer(double posInicialX, double posInicialY) {
+    public void aparecer() {
         this.posX = posInicialX;
         this.posY = posInicialY;
         this.esVisible = true;
@@ -72,7 +75,7 @@ public abstract class ElementoGrafico {
 
     protected abstract void setSprite(Imagen sprite);
 
-    public void setEsVisible(boolean esVisible) {
+    public void setIsVisible(boolean esVisible) {
         this.esVisible = esVisible;
     }
 
@@ -82,6 +85,14 @@ public abstract class ElementoGrafico {
 
     public double getVelocidadElemento() {
         return this.velocidadElemento;
+    }
+
+    public void setPosInicialX(double posInicialX) {
+        this.posInicialX = posInicialX;
+    }
+
+    public void setPosInicialY(double posInicialY) {
+        this.posInicialY = posInicialY;
     }
 
 }

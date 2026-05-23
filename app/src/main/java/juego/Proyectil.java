@@ -19,11 +19,6 @@ public abstract class Proyectil extends ElementoGrafico {
         }
     }
 
-    @Override
-    public void aparecer(double posInicialX, double posInicialY) {
-        super.aparecer(posInicialX, posInicialY);
-    }
-
     // Si el elemento es visible
     @Override
     public void renderizar(Lienzo lienzo) {

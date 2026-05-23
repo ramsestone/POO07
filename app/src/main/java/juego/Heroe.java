@@ -8,24 +8,20 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
 
     private Entrada gameInput;
 
-    public void setGameInput(Entrada gameInput) {
-      this.gameInput = gameInput;
-    }
-
     private SistemaDeArmamento sistArmamento;
     private boolean disparando;
-
-    public boolean isDisparando() {
-        return disparando;
-    }
 
     // BPS = Balas Por Segundo
     private final double BPS = 3;
 
+
     public Heroe() {
-        setSprite(Assets.HEROE);
+        setSprite(new Imagen(Assets.HEROE));
         initHitBox();
         setGameInput(Juego.getGameInput());
+        setPosInicialX(this.anchoPantalla / 2);
+        setPosInicialY(this.altoSprite / 2);
+
         setVelocidadElemento(500);
         this.sistArmamento = new SistemaDeArmamento(BPS);
     }
@@ -49,16 +45,12 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
     }
 
     @Override
-    public void aparecer(double posInicialX, double posInicialY) {
-        super.aparecer(posInicialX, posInicialY);
-    }
-
-    @Override
     public Proyectil crearProyectil() {
         if (sistArmamento.puedeDisparar()) {
             sistArmamento.reiniciarEnfriamiento();
             ProyectilAzul proyectil = new ProyectilAzul();
-            proyectil.aparecer(posX, posY);
+            proyectil.setPosInicialX(posX);
+            proyectil.setPosInicialY(posY);
             return proyectil;
         }
         return null;
@@ -96,5 +88,13 @@ public class Heroe extends ElementoGrafico implements GeneradorDeProyectiles, Di
     @Override
     public void renderizar(Lienzo lienzo) {
         super.renderizar(lienzo);
+    }
+
+    public boolean isDisparando() {
+        return disparando;
+    }
+
+    public void setGameInput(Entrada gameInput) {
+      this.gameInput = gameInput;
     }
 }

@@ -1,8 +1,29 @@
 package juego;
 
+import edu.epromero.util.ComportamientoEnemigo;
 import edu.epromero.util.Imagen;
 
+@ComportamientoEnemigo(tipo = "Lanza Minas", resistencia = 4, puntos = 100)
 public class LanzaMinas extends NaveEnemiga {
+
+    public LanzaMinas() {
+        setSprite(new Imagen(Assets.DESTRUCTOR));
+        initHitBox();
+
+        this.setVelocidadNave(100);
+        this.setPosInicialX(anchoPantalla / 2);
+        this.setPosInicialY(this.altoPantalla - 75);
+
+        this.tipoNave = "Lanza Minas";
+        this.puntosDeVida = 4;
+        this.valorEnPuntos = 10;
+    }
+
+    @Override
+    public void Mueve(Entrada entrada) {
+        // Redirige la llamada a la superclase para no duplicar código
+        super.Mueve(entrada);
+    }
 
     @Override
     protected void setSprite(Imagen sprite) {

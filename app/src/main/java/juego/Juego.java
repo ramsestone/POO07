@@ -8,7 +8,7 @@ import edu.epromero.util.Lienzo;
 public class Juego {
 
     private static Heroe heroe;
-    AveDePresa enemigo;
+    NaveEnemiga enemigo;
 
     // Definimos los sprites que vamos a usar
     // private static final Imagen FONDO = new
@@ -38,12 +38,11 @@ public class Juego {
 
         heroe = new Heroe();
         heroe.setGameInput(gameInput);
-        heroe.aparecer(ANCHO_PANTALLA / 2, 12);
+        heroe.aparecer();
         elementosGraficos.add(heroe);
         
-        enemigo = new AveDePresa();
-        enemigo.setSprite(Assets.AVE_DE_PRESA);
-        enemigo.aparecer(ANCHO_PANTALLA + 50, ALTO_PANTALLA - 72);
+        enemigo = new Destructor();
+        enemigo.aparecer();
         enemigos.add(enemigo);
         elementosGraficos.add(enemigo);
     }
@@ -74,6 +73,7 @@ public class Juego {
             if (heroe.isDisparando()) {
                 Proyectil proyectil = heroe.crearProyectil();
                 if (proyectil != null) {
+                    proyectil.aparecer();
                     elementosGraficos.add(proyectil);
                 }
             }
@@ -84,7 +84,7 @@ public class Juego {
             crearProyectilesEnemigos(deltaTime);
             verificarColisiones(deltaTime);
 
-            actualizarElementosGráficos(deltaTime);
+            actualizarElementosGraficos(deltaTime);
             mainLienzo.mostrar(16);
         }
     }
@@ -95,7 +95,7 @@ public class Juego {
      * @param deltaTime El tiempo transcurrido (para futuras implementaciones físicas si es
      *        necesario).
      */
-    private void actualizarElementosGráficos(double deltaTime) {
+    private void actualizarElementosGraficos(double deltaTime) {
         Iterator<ElementoGrafico> iterator = elementosGraficos.iterator();
         while (iterator.hasNext()) {
             ElementoGrafico elemento = iterator.next();
@@ -117,6 +117,7 @@ public class Juego {
             NaveEnemiga nave = iterator.next();
             Proyectil proyectil = nave.crearProyectil();
             if (proyectil != null) {
+                proyectil.aparecer();
                 elementosGraficos.add(proyectil);
             }
         }
@@ -147,11 +148,11 @@ public class Juego {
 
                             // ¡Impacto confirmado!
                             if (nave.recibirDanio()) {
-                                nave.setEsVisible(false);
+                                nave.setIsVisible(false);
                             }
 
                             // MEJORA 1: La bala también debe desaparecer al impactar
-                            proyectil.setEsVisible(false);
+                            proyectil.setIsVisible(false);
                             return;
                         }
                     }

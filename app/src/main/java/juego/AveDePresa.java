@@ -7,28 +7,25 @@ import edu.epromero.util.Imagen;
 public class AveDePresa extends NaveEnemiga implements Dispara {
 
     public AveDePresa() {
-        setSprite(Assets.AVE_DE_PRESA);
+        setSprite(new Imagen(Assets.AVE_DE_PRESA));
         initHitBox();
+        this.setPosInicialX(- 75);
+        this.setPosInicialY(this.altoPantalla - 75);
 
+        this.tipoNave = "Ave de Presa";
         this.puntosDeVida = 3;
         this.valorEnPuntos = 10;
+        
         this.balasPorSegundo = 1d / 3;
-        this.tipoNave = "Ave de Presa";
-        this.hitSprite = Assets.AVE_DE_PRESA_NEGATIVA;
+        this.hitSprite = new Imagen(Assets.AVE_DE_PRESA_NEGATIVA);
         this.setVelocidadNave(100);
         this.setSistArmamento(new SistemaDeArmamento(balasPorSegundo));
     }
 
-    /**
-     * Se activa únicamente en el fotograma exacto en el que ocurre la colisión.
-     * 
-     * @param dmgSprite El sprite alternativo a mostrar.
-     */
     @Override
-    protected void cambiarSpriteOnHit(double deltaTime, Imagen dmgSprite) {
-        this.sprite = dmgSprite;
-        this.hitSprite = dmgSprite;
-        this.damageTimer = 0.0;
+    public void Mueve(Entrada entrada) {
+        // Redirige la llamada a la superclase para no duplicar código
+        super.Mueve(entrada);
     }
 
     @Override
@@ -37,16 +34,12 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
     }
 
     @Override
-    public void aparecer(double posInicialX, double posInicialY) {
-        super.aparecer(posInicialX, posInicialY);
-    }
-
-    @Override
     public ProyectilRojo crearProyectil() {
         if (sistArmamento.puedeDisparar()) {
             sistArmamento.reiniciarEnfriamiento();
             ProyectilRojo proyectil = new ProyectilRojo();
-            proyectil.aparecer(posX, posY);
+            proyectil.setPosInicialX(posX);
+            proyectil.setPosInicialY(posY);
             return proyectil;
         }
         return null;
@@ -71,23 +64,27 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
         else {
             if (this.posX < 0) {
                 // Si spawneó a la izquierda, la empujamos hacia la derecha
-                this.posX += (this.velocidadNave * deltaTime) * Math.abs(this.factorMovimiento);
+                this.posX += (this.velocidadNave * deltaTime) * this.factorMovimiento;
             } else {
                 // Si spawneó a la derecha, la empujamos hacia la izquierda
-                this.posX -= (this.velocidadNave * deltaTime) * Math.abs(this.factorMovimiento);
+                this.posX -= (this.velocidadNave * deltaTime) * this.factorMovimiento;
             }
         }
     }
 
     @Override
+    public void aparecer() {
+        super.aparecer();
+    }
+
+    @Override
     public void actualizar(double deltaTime) {
-        iaDeMovimiento(deltaTime);
         super.actualizar(deltaTime);
     }
 
     @Override
     protected Imagen getDamageSprite() {
-        return Assets.AVE_DE_PRESA_NEGATIVA;
+        return new Imagen(Assets.AVE_DE_PRESA_NEGATIVA);
     }
 
     @Override
