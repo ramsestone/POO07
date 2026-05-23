@@ -12,10 +12,16 @@ public final class Assets {
     // Rutas base (útil si decides cambiar la estructura de carpetas después)
     private static final String BASE_PATH = "/resources/";
 
+    // Fuente
+    public static final String FONT = BASE_PATH + "Monocraft-Bold.ttf";
+
+
     // Constantes públicas para acceso global
     public static final String FONDO = BASE_PATH + "background_blue.png";
 
     public static final String HEROE = BASE_PATH + "nave_rebelde.png";
+    
+    public static final String HEROE_NEGATIVO = BASE_PATH + "nave_rebelde_negativo.png";
 
     public static final String DESTRUCTOR = BASE_PATH + "destructor.png";
 
@@ -30,4 +36,6 @@ public final class Assets {
     public static final String PROYECTIL_ROJO = BASE_PATH + "proyectil_rojo.png";
 
     public static final String PROYECTIL_NARANJA = BASE_PATH + "proyectil_naranja.png";
+    
+    public static final String PROYECTIL_VERDE = BASE_PATH + "proyectil_verde.png";
   }
