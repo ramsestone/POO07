@@ -48,11 +48,13 @@ public class LanzaMinas extends NaveEnemiga {
 
             // Ciclo para crear las 8 balas
             for (int i = 0; i < 8; i++) {
-                ProyectilVerde mina = new ProyectilVerde(); // O el color que le corresponda
+                ProyectilVerde mina = new ProyectilVerde(); // O el color que le
+                                                            // corresponda
                 mina.setPosInicialX(this.posX);
                 mina.setPosInicialY(this.posY);
 
-                // 1. Calculamos el ángulo en grados (0, 45, 90, 135...) y lo pasamos a radianes
+                // 1. Calculamos el ángulo en grados (0, 45, 90, 135...) y lo
+                // pasamos a radianes
                 double angulo = Math.toRadians(i * 45);
 
                 // 2. Extraemos los componentes vectoriales
@@ -80,25 +82,27 @@ public class LanzaMinas extends NaveEnemiga {
         // Estado A: La nave ya está en la zona de juego (Patrullaje)
         if (this.isInBounds) {
 
-            this.posX += (this.velocidadNave * deltaTime) * this.factorMovimiento;
+            this.posX +=
+                    (this.velocidadNave * deltaTime) * this.factorMovimiento;
 
             // Verificamos si chocó con un borde para invertir la dirección
             if (this.posX >= Juego.getAnchoPantalla() || this.posX <= 0) {
                 this.factorMovimiento *= -1;
             }
 
-        }
-        // Estado B: La nave está fuera de la pantalla (Acercamiento)
-        else {
+        } else {
             if (this.posY >= getAlturaDeseada()) {
-                this.posY -= (this.velocidadNave * deltaTime) * this.factorMovimiento;
+                this.posY -= (this.velocidadNave * deltaTime)
+                        * this.factorMovimiento;
             }
             if (this.posX < 0) {
                 // Si spawneó a la izquierda, la empujamos hacia la derecha
-                this.posX += (this.velocidadNave * deltaTime) * this.factorMovimiento;
+                this.posX += (this.velocidadNave * deltaTime)
+                        * this.factorMovimiento;
             } else {
                 // Si spawneó a la derecha, la empujamos hacia la izquierda
-                this.posX -= (this.velocidadNave * deltaTime) * this.factorMovimiento;
+                this.posX -= (this.velocidadNave * deltaTime)
+                        * this.factorMovimiento;
             }
         }
     }

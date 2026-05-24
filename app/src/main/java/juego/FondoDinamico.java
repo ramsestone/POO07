@@ -7,7 +7,7 @@ public class FondoDinamico extends ElementoGrafico {
 
     private double desplazamientoY;
     private double yOffset;
-    private final double VELOCIDAD_SCROLL = 50.0; // Píxeles por segundo
+    private final double velocidadScroll = 50.0; // Píxeles por segundo
     private int altoFondo;
 
     public FondoDinamico() {
@@ -26,10 +26,12 @@ public class FondoDinamico extends ElementoGrafico {
     @Override
     public void actualizar(double deltaTime) {
         // 1. Restamos la velocidad para que el fondo se mueva hacia ABAJO
-        this.desplazamientoY -= VELOCIDAD_SCROLL * deltaTime;
+        this.desplazamientoY -= velocidadScroll * deltaTime;
 
-        // 2. Evaluamos el límite negativo. Si bajó más allá de su propia altura,
-        // le sumamos la altura para "teletransportarlo" suavemente y mantener el bucle.
+        // 2. Evaluamos el límite negativo. Si bajó más allá de su propia
+        // altura,
+        // le sumamos la altura para "teletransportarlo" suavemente y mantener
+        // el bucle.
         if (this.desplazamientoY <= -this.altoFondo - yOffset) {
             this.desplazamientoY += this.altoFondo + yOffset;
         }
@@ -41,13 +43,16 @@ public class FondoDinamico extends ElementoGrafico {
         int centroYBase = Juego.getAltoPantalla() / 2;
 
         // DIBUJO 1: La imagen principal que va cayendo
-        int posicionYImagenPrincipal = (int) (centroYBase + this.desplazamientoY);
+        int posicionYImagenPrincipal =
+                (int) (centroYBase + this.desplazamientoY);
         lienzo.dibujo(centroX, posicionYImagenPrincipal, this.sprite);
 
-        // DIBUJO 2: La imagen secundaria. Al SUMARLE el alto en un plano cartesiano,
+        // DIBUJO 2: La imagen secundaria. Al SUMARLE el alto en un plano
+        // cartesiano,
         // la estamos colocando físicamente "arriba" de la imagen principal,
         // lista para entrar a la pantalla conforme la principal cae.
-        double posicionYImagenSecundaria = posicionYImagenPrincipal + this.altoFondo + yOffset;
+        double posicionYImagenSecundaria =
+                posicionYImagenPrincipal + this.altoFondo + yOffset;
         lienzo.dibujo(centroX, posicionYImagenSecundaria, this.sprite);
     }
 }

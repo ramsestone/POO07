@@ -49,28 +49,30 @@ public class AveDePresa extends NaveEnemiga implements Dispara {
     }
 
     protected void iaDeMovimiento(double deltaTime) {
-        if (!isInBounds && this.posX >= 0 && this.posX <= Juego.getAnchoPantalla()) {
+        if (!isInBounds && this.posX >= 0
+                && this.posX <= Juego.getAnchoPantalla()) {
             isInBounds = true;
         }
         // Estado A: La nave ya está en la zona de juego (Patrullaje)
         if (this.isInBounds) {
 
-            this.posX += (this.velocidadNave * deltaTime) * this.factorMovimiento;
+            this.posX +=
+                    (this.velocidadNave * deltaTime) * this.factorMovimiento;
 
             // Verificamos si chocó con un borde para invertir la dirección
             if (this.posX >= Juego.getAnchoPantalla() || this.posX <= 0) {
                 this.factorMovimiento *= -1;
             }
 
-        }
-        // Estado B: La nave está fuera de la pantalla (Acercamiento)
-        else {
+        } else {
             if (this.posX < 0) {
                 // Si spawneó a la izquierda, la empujamos hacia la derecha
-                this.posX += (this.velocidadNave * deltaTime) * this.factorMovimiento;
+                this.posX += (this.velocidadNave * deltaTime)
+                        * this.factorMovimiento;
             } else {
                 // Si spawneó a la derecha, la empujamos hacia la izquierda
-                this.posX -= (this.velocidadNave * deltaTime) * this.factorMovimiento;
+                this.posX -= (this.velocidadNave * deltaTime)
+                        * this.factorMovimiento;
             }
         }
     }

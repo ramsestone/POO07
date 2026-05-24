@@ -25,7 +25,8 @@ public class GestorMusica {
                 this.clipFondo = AudioSystem.getClip();
                 this.clipFondo.open(flujoAudioDecodificado);
             } else {
-                System.err.println("No se pudo localizar la pista musical: " + rutaAudio);
+                System.err.println(
+                        "No se pudo localizar la pista musical: " + rutaAudio);
             }
 
         } catch (Exception e) {

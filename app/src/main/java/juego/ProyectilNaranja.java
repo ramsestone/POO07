@@ -3,13 +3,13 @@ package juego;
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
-public class ProyectilNaranja extends Proyectil{
+public class ProyectilNaranja extends Proyectil {
     private int direccion;
     private int offset;
 
     public ProyectilNaranja() {
         setSprite(new Imagen(Assets.PROYECTIL_ROJO));
-        this.offset = 45; 
+        this.offset = 45;
         initHitBox();
     }
 
@@ -20,11 +20,13 @@ public class ProyectilNaranja extends Proyectil{
 
     @Override
     public void actualizar(double deltaTime) {
-        if (!esVisible)
+        if (!esVisible) {
             return;
+        }
+
         super.actualizar(deltaTime);
-        this.posY -= this.VELOCIDAD_PROYECTIL * deltaTime;
-        this.posX += (this.VELOCIDAD_PROYECTIL * deltaTime) * direccion;
+        this.posY -= this.velocidadProyectil * deltaTime;
+        this.posX += (this.velocidadProyectil * deltaTime) * direccion;
     }
 
     public void setDireccion(int direccion) {
@@ -37,13 +39,14 @@ public class ProyectilNaranja extends Proyectil{
 
     @Override
     public void renderizar(Lienzo lienzo) {
-        if (!esVisible)
+        if (!esVisible) {
             return;
+        }
+
         if (direccion == 1) {
             lienzo.dibujo(posX, posY, sprite, offset);
-        }
-        else {
-            lienzo.dibujo(posX, posY, sprite, - offset);           
+        } else {
+            lienzo.dibujo(posX, posY, sprite, -offset);
         }
     }
 }

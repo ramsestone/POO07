@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import edu.epromero.util.Destruible;
 import edu.epromero.util.Imagen;
 
-public abstract class NaveEnemiga extends ElementoGrafico implements Destruible {
+public abstract class NaveEnemiga extends ElementoGrafico
+        implements Destruible {
     protected int puntosDeVida;
     protected double balasPorSegundo;
     protected int valorEnPuntos;
@@ -19,7 +20,7 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
     protected Imagen hitSprite;
     protected boolean isTakingDamage;
     protected double damageTimer;
-    protected final double DAMAGE_DURATION = 0.1;
+    protected final double damageDuration = 0.1;
 
     protected SistemaDeArmamento sistArmamento;
 
@@ -30,9 +31,9 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
     }
 
     /**
-     * Método exigido por la auditoría automatizada. Actúa como un puente hacia la
-     * IA utilizando el último registro de tiempo. * @param entrada Los controles
-     * del juego (se ignoran porque el enemigo usa IA).
+     * Método exigido por la auditoría automatizada. Actúa como un puente hacia
+     * la IA utilizando el último registro de tiempo. * @param entrada Los
+     * controles del juego (se ignoran porque el enemigo usa IA).
      */
     public void Mueve(Entrada entrada) {
         this.iaDeMovimiento(this.ultimoDeltaTime);
@@ -97,9 +98,10 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
             this.damageTimer += deltaTime;
 
             // Evaluamos si ya pasó el tiempo límite
-            if (this.damageTimer >= this.DAMAGE_DURATION) {
+            if (this.damageTimer >= this.damageDuration) {
 
-                // El tiempo expiró: apagamos el estado y restauramos el sprite original
+                // El tiempo expiró: apagamos el estado y restauramos el sprite
+                // original
                 this.isTakingDamage = false;
                 this.sprite = this.defaultSprite;
                 this.damageTimer = 0.0;
@@ -129,12 +131,13 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
         boolean estaDemasiadoArriba = miAbajo > suArriba;
 
         // Si alguna de las condiciones es verdadera, NO hay colisión.
-        if (estaDemasiadoALaIzquierda || estaDemasiadoALaDerecha || estaDemasiadoAbajo
-                || estaDemasiadoArriba) {
+        if (estaDemasiadoALaIzquierda || estaDemasiadoALaDerecha
+                || estaDemasiadoAbajo || estaDemasiadoArriba) {
             return false;
         }
 
-        // Si sobrevivió a todas las pruebas de separación, obligatoriamente se están
+        // Si sobrevivió a todas las pruebas de separación, obligatoriamente se
+        // están
         // tocando
         return true;
     }
@@ -150,7 +153,6 @@ public abstract class NaveEnemiga extends ElementoGrafico implements Destruible 
 
     /**
      * Asigna la altura deseada usando AltoDeLaPantalla -
-     * 
      * @param deltaTime El tiempo transcurrido (para futuras implementaciones
      *        físicas si es necesario).
      */

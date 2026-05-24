@@ -92,11 +92,12 @@ public class Juego {
                     // Actualizar y dibujar el fondo PRIMERO (Capa más profunda)
                     fondoAnimado.actualizar(deltaTime);
                     fondoAnimado.renderizar(mainLienzo);
-                    // =======================================================================================
+                    // ========================================================
                     // Procesar inputs del jugador
-                    // =======================================================================================
+                    // ========================================================
                     if (heroe.isDisparando()) {
-                        ArrayList<Proyectil> proyectiles = heroe.crearProyectiles();
+                        ArrayList<Proyectil> proyectiles =
+                                heroe.crearProyectiles();
                         if (proyectiles != null && !proyectiles.isEmpty()) {
                             for (Proyectil proyectil : proyectiles) {
                                 if (proyectil != null) {
@@ -111,9 +112,9 @@ public class Juego {
                         estadoActual = Estado.GAME_OVER;
                     }
 
-                    // =======================================================================================
+                    // ========================================================
                     // Actualizacion de elementos graficos.
-                    // =======================================================================================
+                    // ========================================================
                     generador.actualizar(deltaTime);
                     crearProyectilesEnemigos(deltaTime);
                     verificarColisiones(deltaTime);
@@ -126,6 +127,9 @@ public class Juego {
                     dibujarGameOver();
                     actualizarGameOver();
                     musicaFondo.detener();
+                    break;
+
+                default:
                     break;
             }
             mainLienzo.mostrar(16);
@@ -140,7 +144,8 @@ public class Juego {
         mainLienzo.ponColorLapiz(Color.YELLOW);
         // Usamos una fuente más grande para el título
         mainLienzo.ponFuente(new Font("DialogInput", Font.BOLD, 60));
-        mainLienzo.texto(ANCHO_PANTALLA / 2, ALTO_PANTALLA * 0.7, "INVASIÓN GALÁCTICA");
+        mainLienzo.texto(ANCHO_PANTALLA / 2, ALTO_PANTALLA * 0.7,
+                "INVASIÓN GALÁCTICA");
 
         // Instrucciones
         mainLienzo.ponColorLapiz(Color.WHITE);
@@ -195,11 +200,13 @@ public class Juego {
      * activos y re-inicializando los personajes principales.
      */
     private void reiniciarJuego() {
-        // 1. Limpiar por completo las listas para liberar memoria y evitar duplicados
+        // 1. Limpiar por completo las listas para liberar memoria y evitar
+        // duplicados
         this.elementosGraficos.clear();
         this.enemigos.clear();
 
-        // 2. Re-instanciar al héroe (esto reinicia automáticamente sus vidas a 3 y
+        // 2. Re-instanciar al héroe (esto reinicia automáticamente sus vidas a
+        // 3 y
         // puntos a 0)
         heroe = new Heroe();
         heroe.setGameInput(gameInput);
@@ -207,11 +214,13 @@ public class Juego {
         this.elementosGraficos.add(heroe);
 
         // Generar un enemigo nuevo cada 2.5 segundos
-        this.generador = new GeneradorDeEnemigos(2.5, enemigos, elementosGraficos);
+        this.generador =
+                new GeneradorDeEnemigos(2.5, enemigos, elementosGraficos);
     }
 
     private void dibujarUi() {
-        String puntosJugador = "Puntaje: " + String.valueOf(heroe.getPuntosGanados());
+        String puntosJugador =
+                "Puntaje: " + String.valueOf(heroe.getPuntosGanados());
         String vidasJugador = "Vidas: " + String.valueOf(heroe.getVidas());
 
         mainLienzo.textoIzquierda(0, -20, puntosJugador);
@@ -220,7 +229,6 @@ public class Juego {
 
     /**
      * Actualiza todos los elementos gráficos.
-     * 
      * @param deltaTime El tiempo transcurrido (para futuras implementaciones
      *        físicas si es necesario).
      */
@@ -258,7 +266,6 @@ public class Juego {
 
     /**
      * Verifica las colisiones entre los proyectiles y las naves enemigas.
-     * 
      * @param deltaTime El tiempo transcurrido (para futuras implementaciones
      *        físicas si es necesario).
      */
@@ -281,11 +288,13 @@ public class Juego {
 
                             // ¡Impacto confirmado!
                             if (nave.recibirDanio()) {
-                                heroe.setPuntosGanados(heroe.getPuntosGanados() + nave.getPuntos());
+                                heroe.setPuntosGanados(heroe.getPuntosGanados()
+                                        + nave.getPuntos());
                                 nave.setIsVisible(false);
                             }
 
-                            // MEJORA 1: La bala también debe desaparecer al impactar
+                            // MEJORA 1: La bala también debe desaparecer al
+                            // impactar
                             proyectil.setIsVisible(false);
                             return;
                         }
@@ -296,13 +305,16 @@ public class Juego {
         // NUEVO BLOQUE: Verificamos si algún proyectil enemigo golpea al Héroe
         for (ElementoGrafico elemento : elementosGraficos) {
 
-            // 1. Filtrado estricto: Solo evaluamos amenazas reales para el héroe
-            if (elemento instanceof ProyectilRojo || elemento instanceof ProyectilNaranja
+            // 1. Filtrado estricto: Solo evaluamos amenazas reales para el
+            // héroe
+            if (elemento instanceof ProyectilRojo
+                    || elemento instanceof ProyectilNaranja
                     || elemento instanceof ProyectilVerde) {
 
                 Proyectil proyectilEnemigo = (Proyectil) elemento;
 
-                // 2. Solo calculamos matemáticas si ambos objetos siguen activos en pantalla
+                // 2. Solo calculamos matemáticas si ambos objetos siguen
+                // activos en pantalla
                 if (proyectilEnemigo.isVisible() && heroe.isVisible()) {
 
                     // 3. Ejecutamos la prueba de geometría
@@ -312,8 +324,10 @@ public class Juego {
                         heroe.recibirDanio();
                         proyectilEnemigo.setIsVisible(false);
 
-                        // Nota técnica: Aquí no hacemos un 'return' temprano porque
-                        // el héroe podría recibir el impacto de dos balas en el mismo frame.
+                        // Nota técnica: Aquí no hacemos un 'return' temprano
+                        // porque
+                        // el héroe podría recibir el impacto de dos balas en el
+                        // mismo frame.
                     }
                 }
             }

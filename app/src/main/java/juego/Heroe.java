@@ -16,10 +16,10 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
     private boolean disparando;
     private boolean isTakingDamage;
     private double damageTimer;
-    private final double DAMAGE_DURATION = 0.1;
+    private final double dmgDuration = 0.1;
 
     // BPS = Balas Por Segundo
-    private final double BPS = 3;
+    private final double bps = 3;
 
     private int puntosGanados;
     private int puntosDeVida;
@@ -33,7 +33,7 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
         inicia();
 
         setVelocidadElemento(500);
-        this.sistArmamento = new SistemaDeArmamento(BPS);
+        this.sistArmamento = new SistemaDeArmamento(bps);
     }
 
     public void inicia() {
@@ -95,8 +95,9 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
 
     @Override
     public void actualizar(double deltaTime) {
-        if (!esVisible)
+        if (!esVisible) {
             return;
+        }
 
         // Calcular la distancia para el frame actual
         double distanciaFrame = this.velocidadElemento * deltaTime;
@@ -106,12 +107,14 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
         if (gameInput.izquierdaPres()) {
             this.posX -= distanciaFrame;
         }
-
         if (gameInput.derechaPres()) {
             this.posX += distanciaFrame;
         }
-
-        this.disparando = gameInput.disparoPres() ? true : false;
+        if (gameInput.disparoPres()) {
+            this.disparando = true;
+        } else {
+            this.disparando = false;
+        }
 
         // Gestionar limites de la pantalla
         if (this.posX <= 0) {
@@ -131,9 +134,10 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
             this.damageTimer += deltaTime;
 
             // Evaluamos si ya pasó el tiempo límite
-            if (this.damageTimer >= this.DAMAGE_DURATION) {
+            if (this.damageTimer >= this.dmgDuration) {
 
-                // El tiempo expiró: apagamos el estado y restauramos el sprite original
+                // El tiempo expiró: apagamos el estado y restauramos el sprite
+                // original
                 this.isTakingDamage = false;
                 this.sprite = this.defaultSprite;
                 this.damageTimer = 0.0;
@@ -142,10 +146,9 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
     }
 
     /**
-     * Evalúa geométricamente si un proyectil enemigo intercepta al héroe. Utiliza
-     * el algoritmo de Cajas Delimitadoras Alineadas a los Ejes (AABB). * @param
-     * proyectil El proyectil enemigo a evaluar.
-     * 
+     * Evalúa geométricamente si un proyectil enemigo intercepta al héroe.
+     * Utiliza el algoritmo de Cajas Delimitadoras Alineadas a los Ejes (AABB).
+     * * @param proyectil El proyectil enemigo a evaluar.
      * @return true si los hitboxes se superponen, false en caso contrario.
      */
     public boolean hayColision(Proyectil proyectil) {
@@ -167,9 +170,10 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
         boolean estaDemasiadoAbajo = miArriba < suAbajo;
         boolean estaDemasiadoArriba = miAbajo > suArriba;
 
-        // Si hay separación en cualquier eje, la colisión es matemáticamente imposible
-        if (estaDemasiadoALaIzquierda || estaDemasiadoALaDerecha || estaDemasiadoAbajo
-                || estaDemasiadoArriba) {
+        // Si hay separación en cualquier eje, la colisión es matemáticamente
+        // imposible
+        if (estaDemasiadoALaIzquierda || estaDemasiadoALaDerecha
+                || estaDemasiadoAbajo || estaDemasiadoArriba) {
             return false;
         }
 

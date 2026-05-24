@@ -17,17 +17,19 @@ public class ProyectilAzul extends Proyectil {
 
     @Override
     public void actualizar(double deltaTime) {
-        if (!esVisible)
+        if (!esVisible) {
             return;
+        }
         super.actualizar(deltaTime);
-        this.posY += this.VELOCIDAD_PROYECTIL * deltaTime;
+        this.posY += this.velocidadProyectil * deltaTime;
     }
 
     @Override
     public void renderizar(Lienzo lienzo) {
         super.renderizar(lienzo);
         // DEBUG
-        // String debug_info = String.format("[PRY_AZ] Type: {%s} | X: {%f} | Y: {%f} |
+        // String debug_info = String.format("[PRY_AZ] Type: {%s} | X: {%f} | Y:
+        // {%f} |
         // Sprite Ancho: {%f} | Sprite Alto: {%f} | isInBounds: {%s}",
         // this.toString(), this.posX, this.posY, this.getAnchoSprite(),
         // this.getAltoSprite(), this.isInBounds);

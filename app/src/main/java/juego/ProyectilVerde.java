@@ -2,14 +2,12 @@ package juego;
 
 import edu.epromero.util.Imagen;
 
-public class ProyectilVerde extends Proyectil{
+public class ProyectilVerde extends Proyectil {
     private double direccionX;
     private double direccionY;
-    private int offset;
 
     public ProyectilVerde() {
         setSprite(new Imagen(Assets.PROYECTIL_VERDE));
-        this.offset = 45;
         initHitBox();
     }
 
@@ -22,8 +20,10 @@ public class ProyectilVerde extends Proyectil{
     public void actualizar(double deltaTime) {
         super.actualizar(deltaTime);
 
-        this.posX += (this.VELOCIDAD_PROYECTIL * deltaTime) * this.getDireccionX();
-        this.posY += (this.VELOCIDAD_PROYECTIL * deltaTime) * this.getDireccionY();
+        this.posX +=
+                (this.velocidadProyectil * deltaTime) * this.getDireccionX();
+        this.posY +=
+                (this.velocidadProyectil * deltaTime) * this.getDireccionY();
     }
 
     public void setDireccion(double xDireccion, double yDireccion) {
