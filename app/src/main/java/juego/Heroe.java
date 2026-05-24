@@ -2,6 +2,7 @@ package juego;
 
 import java.util.ArrayList;
 import edu.epromero.util.Destruible;
+import edu.epromero.util.FabricaAudio;
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
@@ -50,16 +51,39 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
     @Override
     public boolean recibirDanio() {
         aplicarEfectoDanio(this.getDamageSprite());
+        playDanioSound();
         this.puntosDeVida -= 1;
         if (puntosDeVida > 0) {
             return false;
         }
+        playGameOver();
         setIsVisible(false);
         return true;
     }
 
+    private void playGameOver() {
+        FabricaAudio sound = new FabricaAudio();
+        FabricaAudio voice = new FabricaAudio();
+
+        sound.reproducir(Assets.GAME_OVER_SOUND);
+        sound.reproducir(Assets.GAME_OVER_SOUND);
+        sound.reproducir(Assets.GAME_OVER_SOUND);
+        sound.reproducir(Assets.GAME_OVER_SOUND);
+        sound.reproducir(Assets.GAME_OVER_SOUND);
+        voice.reproducir(Assets.GAME_OVER_VOICE);
+        voice.reproducir(Assets.GAME_OVER_VOICE);
+        voice.reproducir(Assets.GAME_OVER_VOICE);
+        voice.reproducir(Assets.GAME_OVER_VOICE);
+        voice.reproducir(Assets.GAME_OVER_VOICE);
+    }
+
     public void perderVida() {
         recibirDanio();
+    }
+
+    private void playDanioSound() {
+        FabricaAudio sound = new FabricaAudio();
+        sound.reproducir(Assets.HEROE_DANIO);
     }
 
     protected void aplicarEfectoDanio(Imagen dmgSprite) {
@@ -85,6 +109,7 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
             sistArmamento.reiniciarEnfriamiento();
             ArrayList<Proyectil> proyectiles = new ArrayList<>();
             ProyectilAzul proyectil = new ProyectilAzul();
+            proyectil.playSonido();
             proyectiles.add(proyectil);
             proyectil.setPosInicialX(posX);
             proyectil.setPosInicialY(posY);

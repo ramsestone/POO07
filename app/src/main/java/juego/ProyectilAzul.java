@@ -1,5 +1,6 @@
 package juego;
 
+import edu.epromero.util.FabricaAudio;
 import edu.epromero.util.Imagen;
 import edu.epromero.util.Lienzo;
 
@@ -8,6 +9,12 @@ public class ProyectilAzul extends Proyectil {
     public ProyectilAzul() {
         setSprite(new Imagen(Assets.PROYECTIL_AZUL));
         initHitBox();
+    }
+
+    @Override
+    public void playSonido() {
+        FabricaAudio sonido = new FabricaAudio();
+        sonido.reproducir(Assets.PROY_AZUL_DISPARO);
     }
 
     @Override

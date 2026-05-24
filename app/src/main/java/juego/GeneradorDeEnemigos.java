@@ -37,7 +37,7 @@ public class GeneradorDeEnemigos {
 
     private void generarEnemigo() {
         NaveEnemiga nuevoEnemigo;
-        int tipo = random.nextInt(3); // 0, 1 o 2
+        int tipo = random.nextInt(4); // 0, 1, 2, 3
 
         // Variables locales para almacenar la posición calculada según el tipo
         double posX = 0.0;
@@ -80,6 +80,22 @@ public class GeneradorDeEnemigos {
                 // Regla Y: Fuera de la pantalla (solo arriba en el plano
                 // cartesiano)
                 posY = altoPantalla + 50.0;
+                break;
+
+            case 2: // Pulverizador
+                nuevoEnemigo = new Pulverizador();
+
+                // Regla X: Determinar aleatoriamente si aparece por la
+                // izquierda o derecha
+                if (random.nextBoolean()) {
+                    posX = -50.0; // Fuera de la pantalla por la izquierda
+                } else {
+                    posX = anchoPantalla + 50.0; // Fuera de la pantalla por la
+                                                 // derecha
+                }
+
+                posY = limiteMinimoY + (random.nextDouble()
+                        * (limiteMaximoY - limiteMinimoY));
                 break;
 
             default: // LanzaMinas

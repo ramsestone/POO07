@@ -49,7 +49,7 @@ public class GestorMusica {
     }
 
     /**
-     * Detiene la música (ideal para cuando cambias al estado GAME_OVER).
+     * Detiene la música
      */
     public void detener() {
         if (this.clipFondo != null && this.clipFondo.isRunning()) {

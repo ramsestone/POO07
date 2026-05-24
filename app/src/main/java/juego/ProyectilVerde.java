@@ -1,5 +1,6 @@
 package juego;
 
+import edu.epromero.util.FabricaAudio;
 import edu.epromero.util.Imagen;
 
 public class ProyectilVerde extends Proyectil {
@@ -24,6 +25,12 @@ public class ProyectilVerde extends Proyectil {
                 (this.velocidadProyectil * deltaTime) * this.getDireccionX();
         this.posY +=
                 (this.velocidadProyectil * deltaTime) * this.getDireccionY();
+    }
+
+    @Override
+    public void playSonido() {
+        FabricaAudio sonido = new FabricaAudio();
+        sonido.reproducir(Assets.PROY_VERDE_DISPARO);
     }
 
     public void setDireccion(double xDireccion, double yDireccion) {

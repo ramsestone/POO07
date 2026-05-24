@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import edu.epromero.util.Lienzo;
 
 public class Juego {
@@ -17,6 +16,7 @@ public class Juego {
     // Bandera para evitar el "Input Bleed" entre pantallas
     private boolean teclaLiberada = false;
     private GestorMusica musicaFondo;
+    private GestorMusica musicaGameover;
     private Estado estadoActual = Estado.MENU; // Iniciamos en el menú
 
     private static Heroe heroe;
@@ -36,10 +36,8 @@ public class Juego {
 
     public Juego() {
         // TODO Implementar registro de puntuación alta
-        // TODO Implementar musica de game over
-        // TODO Implementar efectos de sonido generales
+        // TODO Arreglar música en bucle
         // TODO Implementar easter egg
-        // TODO Sacar 10 en el evaluador
         this.mainLienzo = new Lienzo();
         this.mainLienzo.ponTamanioLienzo(ANCHO_PANTALLA, ALTO_PANTALLA);
         this.mainLienzo.ponEscalaX(0, ANCHO_PANTALLA);
@@ -49,6 +47,7 @@ public class Juego {
         mainLienzo.ponFuente(new Font("DialogInput", Font.BOLD, 20));
 
         this.musicaFondo = new GestorMusica(Assets.MUSICA);
+        this.musicaGameover = new GestorMusica(Assets.GAME_OVER_SOUND);
 
         gameInput = new Entrada(mainLienzo);
 
@@ -84,6 +83,7 @@ public class Juego {
             switch (estadoActual) {
                 case MENU:
                     musicaFondo.reproducirEnBucle();
+                    musicaGameover.detener();
                     actualizarMenu();
                     dibujarMenu();
                     break;
@@ -127,6 +127,7 @@ public class Juego {
                     dibujarGameOver();
                     actualizarGameOver();
                     musicaFondo.detener();
+                    musicaGameover.reproducirEnBucle();
                     break;
 
                 default:
@@ -229,6 +230,7 @@ public class Juego {
 
     /**
      * Actualiza todos los elementos gráficos.
+     * 
      * @param deltaTime El tiempo transcurrido (para futuras implementaciones
      *        físicas si es necesario).
      */
@@ -254,6 +256,7 @@ public class Juego {
             NaveEnemiga nave = iterator.next();
             ArrayList<Proyectil> proyectiles = nave.crearProyectiles();
             if (proyectiles != null && !proyectiles.isEmpty()) {
+                proyectiles.get(0).playSonido();
                 for (Proyectil proyectil : proyectiles) {
                     if (proyectil != null) {
                         proyectil.aparecer();
@@ -266,6 +269,7 @@ public class Juego {
 
     /**
      * Verifica las colisiones entre los proyectiles y las naves enemigas.
+     * 
      * @param deltaTime El tiempo transcurrido (para futuras implementaciones
      *        físicas si es necesario).
      */
@@ -302,14 +306,15 @@ public class Juego {
                 }
             }
         }
-        // NUEVO BLOQUE: Verificamos si algún proyectil enemigo golpea al Héroe
+        // Verificamos si algún proyectil enemigo golpea al Héroe
         for (ElementoGrafico elemento : elementosGraficos) {
 
             // 1. Filtrado estricto: Solo evaluamos amenazas reales para el
             // héroe
             if (elemento instanceof ProyectilRojo
                     || elemento instanceof ProyectilNaranja
-                    || elemento instanceof ProyectilVerde) {
+                    || elemento instanceof ProyectilVerde
+                    || elemento instanceof ProyectilMorado) {
 
                 Proyectil proyectilEnemigo = (Proyectil) elemento;
 
@@ -344,5 +349,9 @@ public class Juego {
 
     public static Entrada getGameInput() {
         return gameInput;
+    }
+
+    public Lienzo getLienzo() {
+        return this.mainLienzo;
     }
 }

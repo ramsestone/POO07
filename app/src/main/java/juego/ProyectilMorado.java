@@ -2,19 +2,18 @@ package juego;
 
 import edu.epromero.util.FabricaAudio;
 import edu.epromero.util.Imagen;
-import edu.epromero.util.Sonido;
 
-public class ProyectilRojo extends Proyectil {
+public class ProyectilMorado extends Proyectil {
 
-    public ProyectilRojo() {
-        setSprite(new Imagen(Assets.PROYECTIL_ROJO));
+    public ProyectilMorado() {
+        setSprite(new Imagen(Assets.PROYECTIL_MORADO));
         initHitBox();
     }
 
     @Override
     public void playSonido() {
         FabricaAudio sonido = new FabricaAudio();
-        sonido.reproducir(Assets.PROY_ROJO_DISPARO);
+        sonido.reproducir(Assets.PROY_MORADO_DISPARO);
     }
 
     @Override

@@ -2,6 +2,7 @@ package juego;
 
 import java.util.ArrayList;
 import edu.epromero.util.Destruible;
+import edu.epromero.util.FabricaAudio;
 import edu.epromero.util.Imagen;
 
 public abstract class NaveEnemiga extends ElementoGrafico
@@ -51,8 +52,17 @@ public abstract class NaveEnemiga extends ElementoGrafico
         if (puntosDeVida > 0) {
             return false;
         }
+        playDeathSound();
         setIsVisible(false);
         return true;
+    }
+
+    private void playDeathSound() {
+        FabricaAudio sound = new FabricaAudio();
+        sound.reproducir(Assets.EXPLOSION);
+        sound.reproducir(Assets.EXPLOSION);
+        sound.reproducir(Assets.EXPLOSION);
+        sound.reproducir(Assets.EXPLOSION);
     }
 
     public int getVidasActuales() {
@@ -153,6 +163,7 @@ public abstract class NaveEnemiga extends ElementoGrafico
 
     /**
      * Asigna la altura deseada usando AltoDeLaPantalla -
+     * 
      * @param deltaTime El tiempo transcurrido (para futuras implementaciones
      *        físicas si es necesario).
      */

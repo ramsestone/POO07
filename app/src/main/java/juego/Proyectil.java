@@ -4,8 +4,10 @@ import edu.epromero.util.Lienzo;
 
 public abstract class Proyectil extends ElementoGrafico {
 
-    protected final double velocidadProyectil = 850;
+    protected final double velocidadProyectil = 800;
     protected final double outboundsOffset = 50;
+
+    public abstract void playSonido();
 
     public void actualizar(double deltaTime) {
         if (!esVisible) {

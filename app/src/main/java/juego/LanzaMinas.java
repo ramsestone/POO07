@@ -2,6 +2,7 @@ package juego;
 
 import java.util.ArrayList;
 import edu.epromero.util.ComportamientoEnemigo;
+import edu.epromero.util.FabricaAudio;
 import edu.epromero.util.Imagen;
 
 @ComportamientoEnemigo(tipo = "Lanza Minas", resistencia = 4, puntos = 100)
@@ -39,10 +40,14 @@ public class LanzaMinas extends NaveEnemiga {
         return new Imagen(Assets.LANZA_MINAS_NEGATIVO);
     }
 
+    public void playSonidoDisparo() {
+        FabricaAudio sound = new FabricaAudio();
+        sound.reproducir(Assets.PROY_VERDE_DISPARO);
+    }
+
     @Override
     protected ArrayList<Proyectil> crearProyectiles() {
         ArrayList<Proyectil> rafaga = new ArrayList<>();
-
         if (this.sistArmamento.puedeDisparar()) {
             this.sistArmamento.reiniciarEnfriamiento();
 
