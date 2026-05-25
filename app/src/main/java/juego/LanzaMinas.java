@@ -21,7 +21,7 @@ public class LanzaMinas extends NaveEnemiga {
 
         this.tipoNave = "Lanza Minas";
         this.puntosDeVida = 4;
-        this.valorEnPuntos = 10;
+        this.valorEnPuntos = 100;
     }
 
     @Override

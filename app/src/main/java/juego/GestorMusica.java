@@ -9,19 +9,19 @@ import javax.sound.sampled.Clip;
 public class GestorMusica {
 
     private Clip clipFondo;
+    // Bandera de control por software para evitar la latencia del hardware
+    private boolean sonando;
 
     public GestorMusica(String rutaAudio) {
+        this.sonando = false; // Inicialmente el gestor está apagado
         try {
-            // 1. Obtenemos el flujo de datos desde el empaquetado (Assets)
             InputStream flujoAudio = getClass().getResourceAsStream(rutaAudio);
 
             if (flujoAudio != null) {
-                // 2. Preparamos el buffer y el decodificador de Java
                 InputStream flujoBuffer = new BufferedInputStream(flujoAudio);
                 AudioInputStream flujoAudioDecodificado =
                         AudioSystem.getAudioInputStream(flujoBuffer);
 
-                // 3. Solicitamos el motor de audio al sistema operativo
                 this.clipFondo = AudioSystem.getClip();
                 this.clipFondo.open(flujoAudioDecodificado);
             } else {
@@ -36,24 +36,26 @@ public class GestorMusica {
     }
 
     /**
-     * Inicia la reproducción en bucle infinito.
+     * Inicia la reproducción en bucle infinito de forma segura.
      */
     public void reproducirEnBucle() {
-        if (this.clipFondo != null && !this.clipFondo.isRunning()) {
-            // Reiniciamos el cabezal de lectura al inicio (fotograma 0)
-            this.clipFondo.setFramePosition(0);
+        // Evaluamos nuestra propia bandera de software
+        if (this.clipFondo != null && !this.sonando) {
+            this.sonando = true; // Bloqueamos inmediatamente el if para los
+                                 // siguientes fotogramas
 
-            // Invocamos la constante nativa para el loop eterno
+            this.clipFondo.setFramePosition(0);
             this.clipFondo.loop(Clip.LOOP_CONTINUOUSLY);
         }
     }
 
     /**
-     * Detiene la música
+     * Detiene la música por completo y restablece el estado de control.
      */
     public void detener() {
-        if (this.clipFondo != null && this.clipFondo.isRunning()) {
+        if (this.clipFondo != null) {
             this.clipFondo.stop();
+            this.sonando = false; // Liberamos la bandera
         }
     }
 }

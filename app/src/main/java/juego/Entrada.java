@@ -24,12 +24,14 @@ public class Entrada {
                 || lienzo.fuePulsadaTecla(KeyEvent.VK_RIGHT);
     }
 
-    public boolean arribaPres() {
-        return lienzo.fuePulsadaTecla(KeyEvent.VK_D)
-                || lienzo.fuePulsadaTecla(KeyEvent.VK_RIGHT);
-    }
-
     public boolean disparoPres() {
         return lienzo.fuePulsadaTecla(KeyEvent.VK_SPACE);
+    }
+    public boolean upPress() {
+        return lienzo.fuePulsadaTecla(KeyEvent.VK_UP);
+    }
+
+    public boolean downPress() {
+        return lienzo.fuePulsadaTecla(KeyEvent.VK_DOWN);
     }
 }

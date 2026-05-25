@@ -62,14 +62,8 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
     }
 
     private void playGameOver() {
-        FabricaAudio sound = new FabricaAudio();
         FabricaAudio voice = new FabricaAudio();
 
-        sound.reproducir(Assets.GAME_OVER_SOUND);
-        sound.reproducir(Assets.GAME_OVER_SOUND);
-        sound.reproducir(Assets.GAME_OVER_SOUND);
-        sound.reproducir(Assets.GAME_OVER_SOUND);
-        sound.reproducir(Assets.GAME_OVER_SOUND);
         voice.reproducir(Assets.GAME_OVER_VOICE);
         voice.reproducir(Assets.GAME_OVER_VOICE);
         voice.reproducir(Assets.GAME_OVER_VOICE);
@@ -84,6 +78,7 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
     private void playDanioSound() {
         FabricaAudio sound = new FabricaAudio();
         sound.reproducir(Assets.HEROE_DANIO);
+
     }
 
     protected void aplicarEfectoDanio(Imagen dmgSprite) {
@@ -174,6 +169,7 @@ public class Heroe extends ElementoGrafico implements Dispara, Destruible {
      * Evalúa geométricamente si un proyectil enemigo intercepta al héroe.
      * Utiliza el algoritmo de Cajas Delimitadoras Alineadas a los Ejes (AABB).
      * * @param proyectil El proyectil enemigo a evaluar.
+     * 
      * @return true si los hitboxes se superponen, false en caso contrario.
      */
     public boolean hayColision(Proyectil proyectil) {

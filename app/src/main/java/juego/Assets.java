@@ -1,5 +1,7 @@
 package juego;
 
+import java.awt.List;
+
 /**
  * Clase centralizada para la gestión de rutas de recursos. Evita la dispersión
  * de strings en el código.
@@ -16,6 +18,17 @@ public final class Assets {
         private static final String BASE_PATH = "/resources/";
         private static final String BASE_PATH_AUDIO = "resources/";
 
+        // Animaciones
+        public static final List FRAMES_EXPLOSION = new List(6, false);
+        static {
+                FRAMES_EXPLOSION.add(BASE_PATH + "Explosion/" + "frame1.png");
+                FRAMES_EXPLOSION.add(BASE_PATH + "Explosion/" + "frame2.png");
+                FRAMES_EXPLOSION.add(BASE_PATH + "Explosion/" + "frame3.png");
+                FRAMES_EXPLOSION.add(BASE_PATH + "Explosion/" + "frame4.png");
+                FRAMES_EXPLOSION.add(BASE_PATH + "Explosion/" + "frame5.png");
+                FRAMES_EXPLOSION.add(BASE_PATH + "Explosion/" + "frame6.png");
+        }
+
         // Sonidos
         public static final String MUSICA = BASE_PATH + "music.wav";
         public static final String EXPLOSION =
@@ -26,7 +39,7 @@ public final class Assets {
         public static final String GAME_OVER_VOICE =
                         BASE_PATH_AUDIO + "game_over_voice.wav";
         public static final String GAME_OVER_SOUND =
-                        BASE_PATH_AUDIO + "game_over_sound.wav";
+                        BASE_PATH + "game_over_sound.wav";
 
         public static final String PROY_AZUL_DISPARO =
                         BASE_PATH_AUDIO + "heroe_disparo.wav";
@@ -38,6 +51,8 @@ public final class Assets {
                         BASE_PATH_AUDIO + "proyectil_morado_disparo.wav";
         public static final String PROY_NARANJA_DISPARO =
                         BASE_PATH_AUDIO + "proyectil_naranja_disparo.wav";
+
+        public static final String WRONG_SOUND = BASE_PATH_AUDIO + "wrong.wav";
 
         // Constantes públicas para acceso global
         public static final String FONDO = BASE_PATH + "fondo.png";
@@ -78,4 +93,6 @@ public final class Assets {
 
         public static final String PROYECTIL_VERDE =
                         BASE_PATH + "proyectil_verde.png";
+
+        public static final String EASTER_EGG = BASE_PATH + "easter_egg.png";
 }
